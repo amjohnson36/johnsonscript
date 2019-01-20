@@ -1,0 +1,87 @@
+# First draft of programs using the grammar laid out in grammar.txt #
+
+def myFunction1(a, b) 
+start
+    var c.
+    
+    if ((a * b) > 1000) start
+        c = True.
+    stop
+    
+    else start
+        c = False.
+    stop
+    
+    return c.
+stop
+
+def myFunction2()
+start
+    # For 1 to 100, prints 'Fizz' if the number is divisible by 3, 'Buzz' if the
+    # number is divisible by 5, 'FizzBuzz' if the number is divisible by both
+    # 3 and 5, and the number elsewise
+
+    var number = 1.
+    while (number < 100) start
+        if (number % 3 == 0) and (number % 5 == 0) start
+            print("FizzBuzz").
+        stop
+
+        else if (number % 3 == 0) start
+            print("Fizz").
+        stop
+
+        else if (number % 5 == 0) start
+            print("Buzz").
+        stop
+
+        else start
+            print(number).
+        stop
+
+        print("\n").
+        number = number + 1.
+    stop
+
+    return 0.
+stop
+
+def myFunction3(myList)
+start
+    # Checks the first two elements of a list and returns the first if it is
+    # greater than or equal to the second, and the second otherwise
+
+    var first = myList[0].
+    var second = myList[1].
+
+    if ((first > second) or (first == second)) start
+        return first.
+    stop
+
+    else start
+        return second.
+    stop
+stop
+
+def main()
+start
+    # Runs myFunction1, myFunction2, and myFunction3 in that order and prints
+    # the return value if appropriate
+    var a = 25.
+    var b = 72.
+
+    var myBoolean = myFunction1(a, b).
+    print("Function 1 complete: ").
+    print(myBoolean).
+    print("\n").
+    
+    myFunction2().
+    print("Function 2 complete\n").
+
+    var myNumber = myFunction3().
+    print("Function 3 complete: ").
+    print(myNumber).
+    print("\n").
+
+    return 0.
+stop
