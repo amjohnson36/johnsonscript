@@ -1,0 +1,36 @@
+#include "types.h"
+
+char* OPAREN = "open parenthesis";
+char* CPAREN = "close parenthesis";
+char* COMMA = "comma";
+char* PLUS = "plus";
+char* MINUS = "minus";
+char* TIMES = "times";
+char* DIVIDES = "divides";
+char* MODULUS = "modulus";
+char* ASSIGN = "assign";
+char* EQUALS = "equals";
+char* GREATERTHAN = "greater than";
+char* LESSTHAN = "less than";
+char* DOT = "dot";
+char* HASH = "hash";
+char* OBRACKET = "open bracket";
+char* CBRACKET = "close bracket";
+char* INTEGER = "integer";
+char* REAL = "real";
+char* STRING = "string";
+char* VAR = "var";
+char* IF = "if";
+char* ELSE = "else";
+char* WHILE = "while";
+char* PRINT = "print";
+char* RETURN = "return";
+char* DEF = "def";
+char* START = "start";
+char* STOP = "stop";
+char* AND = "and";
+char* OR = "or";
+char* ID = "id";
+char* BADNUMBER = "badnumber";
+char* UNKNOWN = "unknown";
+char* END_OF_INPUT = "EOF";
