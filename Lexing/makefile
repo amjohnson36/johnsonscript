@@ -20,6 +20,13 @@ types.o   : types.c types.h
 scanner.o : scanner.c scanner.h
 			gcc $(OOPTS) scanner.c
 
+tests     : scanner
+			./scanner test1
+			./scanner test2
+			./scanner test3
+			./scanner test4
+			./scanner test5
+
 test1     : scanner 
 			./scanner test1
 

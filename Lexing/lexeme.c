@@ -38,7 +38,6 @@ Lexeme* newLexemeChar(char* type, char word)
     l->type = malloc(sizeof(type));
     strcpy(l->type, type);
     l->sval = malloc(word);
-    //l->sval = word;
 
     return l;
 }
@@ -69,5 +68,7 @@ void displayLexeme(Lexeme* l)
     if (strcmp(getLexemeType(l), INTEGER) == 0) printf(": %d", getLexemeInt(l));
     if (strcmp(getLexemeType(l), REAL) == 0) printf(": %lf", getLexemeReal(l));
     if (strcmp(getLexemeType(l), STRING) == 0) printf(": %s", getLexemeString(l));
+    if (strcmp(getLexemeType(l), BOOLEAN) == 0) printf(": %s", getLexemeString(l));
+    if (strcmp(getLexemeType(l), ID) == 0) printf(": %s", getLexemeString(l));
     printf("\n");
 }

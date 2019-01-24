@@ -92,6 +92,7 @@ Lexeme* lexNumber(FILE* fp)
         }
         ch = getc(fp);
     }
+    if (ch == ')' || ch == ']') ungetc(ch, fp);
 
     if (real) return newLexemeWord(REAL, buffer);
     else return newLexemeWord(INTEGER, buffer);
@@ -149,9 +150,12 @@ Lexeme* lexVariableOrKeyword(FILE* fp)
     else if (strcmp(buffer, "or") == 0) {
         return newLexemeWord(OR, buffer);
     }
-    /* else if (strcmp(buffer, "==") == 0) {
-        return newLexemeWord(EQUALS, buffer);
-    } */
+    else if (strcmp(buffer, "not") == 0) {
+        return newLexemeWord(NOT, buffer);
+    }
+    else if ((strcmp(buffer, "True") == 0) || strcmp(buffer, "False") == 0) {
+        return newLexemeWord(BOOLEAN, buffer);
+    }
     else { //string is a variable
         return newLexemeWord(ID, buffer);
     }
@@ -161,18 +165,19 @@ Lexeme* lexVariableOrKeyword(FILE* fp)
 Lexeme* lexString(FILE* fp)
 {
     int ch;
-    char buffer[64] = "";
-    int count = 0;
+    int length = 32;
+    char* buffer = malloc(sizeof(char) * length + 1); // +1 for null byte
+    int index = 0;
 
     ch = getc(fp);
     while ((ch != EOF) && (ch != '\"')) {
-        count++;
-        if (count > 63) {
-            printf("ERROR: TOO MANY CHARS");
-            exit(0);
+        if (index == length) {
+            buffer = realloc(buffer, sizeof(char) * length * 2 + 1);
+            length *= 2;
         }
 
-        buffer[strlen(buffer)] = ch;
+        buffer[index++] = ch;
+        buffer[index] = '\0';
         ch = getc(fp);
     }
     return newLexemeWord(STRING, buffer);
