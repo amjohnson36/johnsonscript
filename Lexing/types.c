@@ -1,3 +1,9 @@
+/* Program written by Alex Johnson
+/  1/25/2019 - CS 403 - Dr. Lusth
+/  types.c contains the assignment of the global variables declared in types.h.
+/  These variables are all the different types that a lexeme could be.
+*/
+
 #include "types.h"
 
 char* OPAREN = "open parenthesis";
@@ -17,7 +23,6 @@ char* HASH = "hash";
 char* OBRACKET = "open bracket";
 char* CBRACKET = "close bracket";
 char* INTEGER = "integer";
-char* REAL = "real";
 char* STRING = "string";
 char* BOOLEAN = "boolean";
 char* VAR = "var";
@@ -33,6 +38,5 @@ char* AND = "and";
 char* OR = "or";
 char* NOT = "not";
 char* ID = "id";
-char* BADNUMBER = "badnumber";
-char* UNKNOWN = "unknown";
+char* ERROR = "ERROR";
 char* END_OF_INPUT = "EOF";

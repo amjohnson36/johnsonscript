@@ -1,3 +1,8 @@
+/* Program written by Alex Johnson
+/  1/25/2019 - CS 403 - Dr. Lusth
+/  types.h contains variable declarations for the types.c file.
+*/
+
 #ifndef __TYPES_INCLUDED__
 #define __TYPES_INCLUDED__
 
@@ -18,7 +23,6 @@ extern char* HASH;
 extern char* OBRACKET;
 extern char* CBRACKET;
 extern char* INTEGER;
-extern char* REAL;
 extern char* STRING;
 extern char* BOOLEAN;
 extern char* VAR;
@@ -34,8 +38,7 @@ extern char* AND;
 extern char* OR;
 extern char* NOT;
 extern char* ID;
-extern char* BADNUMBER;
-extern char* UNKNOWN;
+extern char* ERROR;
 extern char* END_OF_INPUT;
 
 #endif

@@ -1,3 +1,9 @@
+/* Program written by Alex Johnson
+/  1/25/2019 - CS 403 - Dr. Lusth
+/  lex.c contains functions for recognizing the various lexemes in the
+/  source code and returning a lexeme object of that type.
+*/
+
 #include "types.h"
 #include "lexeme.h"
 #include "scanner.h"
@@ -7,6 +13,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+int LINE = 1;
 
 Lexeme* lex(FILE* fp)
 {
@@ -36,7 +44,7 @@ Lexeme* lex(FILE* fp)
         // TODO add other single characters
 
         default:
-            if (ch == '=') {
+            if (ch == '=') { // Check whether it is '=' or '=='
                 int ch2 = getc(fp);
                 if (ch2 == '=') return newLexemeWord(EQUALS, "==");
                 else {
@@ -44,58 +52,43 @@ Lexeme* lex(FILE* fp)
                     return newLexemeChar(ASSIGN, ch);
                 }
             }
-            if (isdigit(ch)) {
+            if (isdigit(ch)) { // Get Integer
                 ungetc(ch, fp);
                 return lexNumber(fp);
             }
-            else if (isalpha(ch)) {
+            else if (isalpha(ch)) { // Check whether variable or keyword
                 ungetc(ch, fp);
                 return lexVariableOrKeyword(fp);
             }
-            else if (ch == '\"') {
+            else if (ch == '\"') { // Must be opening of string
                 return lexString(fp);
             }
             else {
-                return newLexemeChar(UNKNOWN, ch);
+                return newLexemeError(ERROR, "Unknown Character Error", LINE);
             }
     }
 }
 
 Lexeme* lexNumber(FILE* fp)
 {
-    int real = 0;
     int ch;
     char buffer[64] = "";
     int count = 0;
 
     ch = getc(fp);
-    while ((ch != EOF) && (isdigit(ch) || ch == '.')) {
+    while ((ch != EOF) && (isdigit(ch))) {
         count++;
         if (count > 63) {
-            printf("ERROR: TOO MANY CHARS");
-            exit(0);
+            return newLexemeError(ERROR, "Buffer Overflow Error", LINE);
         }
 
         buffer[strlen(buffer)] = ch;
-        if (ch == '.') {
-            int ch2 = getc(fp);
-            if (isdigit(ch2)) {
-                if (real) return newLexemeWord(BADNUMBER, buffer);
-                real = 1;
-                ungetc(ch2, fp);
-            }
-            else {
-                ungetc(ch2, fp);
-                ungetc(ch, fp);
-                break;
-            }
-        }
         ch = getc(fp);
     }
-    if (ch == ')' || ch == ']') ungetc(ch, fp);
 
-    if (real) return newLexemeWord(REAL, buffer);
-    else return newLexemeWord(INTEGER, buffer);
+    ungetc(ch, fp);
+
+    return newLexemeWord(INTEGER, buffer);
 }
 
 Lexeme* lexVariableOrKeyword(FILE* fp)
@@ -108,8 +101,7 @@ Lexeme* lexVariableOrKeyword(FILE* fp)
     while (isalnum(ch)) {
         count++;
         if (count > 63) {
-            printf("ERROR: TOO MANY CHARS");
-            exit(0);
+            return newLexemeError(ERROR, "Buffer Overflow Error", LINE);
         }
 
         buffer[strlen(buffer)] = ch;
@@ -180,6 +172,7 @@ Lexeme* lexString(FILE* fp)
         buffer[index] = '\0';
         ch = getc(fp);
     }
+    if (ch == EOF) return newLexemeError(ERROR, "Bad String Error", LINE);
     return newLexemeWord(STRING, buffer);
 }
 
@@ -187,12 +180,17 @@ void skipWhiteSpace(FILE* fp)
 {
     int ch;
     ch = getc(fp);
+    if (ch == '\n') LINE++;
 
     while (isspace(ch) || ch == '#') {
         if (ch == '#') { // Start of a comment
-            while (ch != '\n') ch = getc(fp); // Keep looping until a newline char is found
+            while (ch != '\n') {
+                ch = getc(fp); // Keep looping until a newline char is found
+                if (ch == '\n') LINE++;
+            }
         }
         ch = getc(fp);
+        if (ch == '\n') LINE++;
     }
     ungetc(ch, fp);
 }

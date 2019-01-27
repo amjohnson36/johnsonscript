@@ -1,3 +1,8 @@
+/* Program written by Alex Johnson
+/  1/25/2019 - CS 403 - Dr. Lusth
+/  To use, run "scanner <f>" where <f> is the name of the file to be scanned.
+*/
+
 #include "types.h"
 #include "lexeme.h"
 #include "scanner.h"
@@ -17,6 +22,5 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    scanner(fp);
-    return 0;
+    return scanner(fp);
 }

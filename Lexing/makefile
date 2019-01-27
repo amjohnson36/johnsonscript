@@ -20,27 +20,27 @@ types.o   : types.c types.h
 scanner.o : scanner.c scanner.h
 			gcc $(OOPTS) scanner.c
 
-tests     : scanner
-			./scanner test1
-			./scanner test2
-			./scanner test3
-			./scanner test4
-			./scanner test5
+run       : scanner
+			./scanner test1.johns
+			./scanner test2.johns
+			./scanner test3.johns
+			./scanner test4.johns
+			./scanner test5.johns
 
 test1     : scanner 
-			./scanner test1
+			./scanner test1.johns
 
 test2     : scanner 
-			./scanner test2
+			./scanner test2.johns
 
 test3     : scanner 
-			./scanner test3
+			./scanner test3.johns
 
 test4     : scanner 
-			./scanner test4
+			./scanner test4.johns
 
 test5     : scanner         # This should fail
-			./scanner test5
+			./scanner test5.johns
 
 clean	  :
 			rm -f $(OBJS) scanner 

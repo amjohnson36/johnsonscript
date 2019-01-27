@@ -1,0 +1,28 @@
+def fizzBuzz()
+start
+    # For 1 to 100, prints 'Fizz' if the number is divisible by 3, 'Buzz' if the
+    # number is divisible by 5, 'FizzBuzz' if the number is divisible by both
+    # 3 and 5, and the number elsewise
+
+    var number = 1.
+    while (number < 100) start
+        if (number % 3 == 0) and (number % 5 == 0) start
+            print("FizzBuzz").
+        stop
+
+        else if (number % 3 == 0) start
+            print("Fizz").
+        stop
+
+        else if (number % 5 == 0) start
+            print("Buzz").
+        stop
+
+        else start
+            print(number).
+        stop
+
+        print("\n").
+        number = number + 1.
+    stop
+stop
