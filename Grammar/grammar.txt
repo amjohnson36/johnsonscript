@@ -7,7 +7,7 @@ definition : varDef
 varDef : VAR ID DOT
        | VAR ID ASSIGN expression DOT
 
-functionDef : DEF ID OPAREN optExpressionList CPAREN block
+functionDef : DEF ID OPAREN optArgumentList CPAREN block
 
 expression : unary
            | unary operator expression
@@ -17,7 +17,6 @@ operator : PLUS
          | TIMES
          | DIVIDES
          | MODULUS
-         | NOT
          | AND
          | OR
          | EQUALS
@@ -27,12 +26,10 @@ operator : PLUS
 
 unary : idDef
       | INTEGER
-      | REAL
       | BOOLEAN
       | CHARACTER
       | STRING
       | OPAREN expression CPAREN
-      | UMINUS unary
       | PRINT OPAREN expression CPAREN
       | RETURN expression
 
@@ -45,6 +42,12 @@ expressionList : expression
 
 optExpressionList : expressionList
                   | *empty*
+
+argumentList : ID
+             | ID COMMA argumentList
+
+optArgumentList : argumentList
+                | *empty*
 
 block : START optStatementList STOP
 

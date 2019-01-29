@@ -20,7 +20,7 @@ There are two things to be declared in the johnsonScript language: variables and
 - Functions are declared by def ID(optional arguments). It is then usually followed by a block that begins with start and ends with stop.<br/>
 
 <h2>Operators</h2>
-The following operators are supported:
+The following operators are supported:<br/>
 - PLUS +<br/>
 - MINUS -<br/>
 - TIMES * <br/>
