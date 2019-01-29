@@ -1,0 +1,14 @@
+
+
+def stringLenth(string)
+start
+    var length = 0.
+    var char = string[0].
+
+    while (char == "\0") start
+        length = length + 1.
+        char = string[length].
+    stop
+
+    return length.
+stop
