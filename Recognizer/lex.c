@@ -6,7 +6,7 @@
 
 #include "types.h"
 #include "lexeme.h"
-#include "parser.h"
+#include "recognizer.h"
 #include "lex.h"
 
 #include <stdio.h>

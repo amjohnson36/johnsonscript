@@ -1,15 +1,16 @@
 /* Program written by Alex Johnson
-/  1/25/2019 - CS 403 - Dr. Lusth
+/  2/01/2019 - CS 403 - Dr. Lusth
 /  To use, run "recognizer <f>" where <f> is the name of the file to be scanned.
 */
 
 #include "types.h"
 #include "lexeme.h"
 #include "lex.h"
-#include "parser.h"
+#include "recognizer.h"
 
 #include <stdio.h>
-FILE* fp;
+
+FILE* fp; // Need a global file pointer
 
 int main(int argc, char* argv[])
 {
@@ -24,5 +25,5 @@ int main(int argc, char* argv[])
         return -1;
     }
     
-    return parse(fp);
+    return recognize(fp);
 }

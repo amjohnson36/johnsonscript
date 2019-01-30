@@ -6,7 +6,7 @@
 
 Lexeme* CurrentLexeme;
 FILE* fp;
-int parse();
+int recognize();
 int check(char*);
 Lexeme* advance();
 Lexeme* match(char*);

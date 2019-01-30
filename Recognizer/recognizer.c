@@ -1,14 +1,14 @@
 #include "types.h"
 #include "lexeme.h"
 #include "lex.h"
-#include "parser.h"
+#include "recognizer.h"
 #include <unistd.h>
 
 #include <string.h>
 
 Lexeme* CurrentLexeme;
 
-int parse()
+int recognize()
 {
     CurrentLexeme = lex(fp);
     program();

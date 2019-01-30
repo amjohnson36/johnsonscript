@@ -6,7 +6,7 @@ start
     # line 23 when the string is not closed.
 
     var b = 100.
-    var c = 100000
+    var c = 100000.
     var d.
 
     if (a > b) start
