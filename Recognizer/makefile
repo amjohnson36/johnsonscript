@@ -20,12 +20,12 @@ types.o      : types.c types.h
 recognizer.o : recognizer.c recognizer.h
 				gcc $(OOPTS) recognizer.c
 
-run          : recognizer
-				./recognizer test1.johns
-				./recognizer test2.johns
-				./recognizer test3.johns
-				./recognizer test4.johns
-				./recognizer test5.johns
+run          : recognizer 
+				-./recognizer test1.johns
+				-./recognizer test2.johns
+				-./recognizer test3.johns
+				-./recognizer test4.johns
+				-./recognizer test5.johns
 
 test1        : recognizer
 				./recognizer test1.johns

@@ -32,6 +32,7 @@ unary : idDef
       | OPAREN expression CPAREN
       | PRINT OPAREN expression CPAREN
       | RETURN expression
+      | NOT unary
 
 idDef : ID
       | ID OBRACKET expression CBRACKET

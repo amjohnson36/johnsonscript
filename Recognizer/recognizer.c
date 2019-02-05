@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include <string.h>
+#include <stdlib.h>
 
 Lexeme* CurrentLexeme;
 
@@ -12,12 +13,6 @@ int recognize()
 {
     CurrentLexeme = lex(fp);
     program();
-    if (strcmp(getLexemeType(CurrentLexeme), ERROR) == 0) {
-        printf("Illegal\n");
-        displayLexeme(CurrentLexeme);
-        return -1;
-    }
-
     match(END_OF_INPUT);
     printf("Legal\n");
     return 0;
@@ -37,14 +32,21 @@ Lexeme* advance()
 
 Lexeme* match(char* type)
 {
-    // printf("%s ---", type);
-    // displayLexeme(CurrentLexeme);
     if (check(type)) {
         return advance();
     }
+    else if (strcmp(getLexemeType(CurrentLexeme), ERROR) == 0) {
+        printf("Illegal\n");
+         displayLexeme(CurrentLexeme);
+         exit(-1);
+    }
     else {
+        printf("Illegal\n");
+        char* ftype = getLexemeType(CurrentLexeme);
         CurrentLexeme = newLexemeError(ERROR, "Syntax Error", LINE);
-        return CurrentLexeme;
+        displayLexeme(CurrentLexeme);
+        printf("expected %s, found %s\n", type, ftype);
+        exit(-1);
     }
 }
 
@@ -161,6 +163,11 @@ void unary()
     else if (check(RETURN)) {
         match(RETURN);
         expression();
+    }
+
+    else if (check(NOT)) {
+        match(NOT);
+        unary();
     }
 }
 

@@ -11,7 +11,7 @@ start
 
     if (a > b) start
         if (a > c) start
-            d = "Big number".
+            d = "Big number"
         stop
 
         else start
@@ -20,7 +20,7 @@ start
     stop
 
     else start
-        d = "Small number.
+        d = "Small number".
     stop
 
 stop
