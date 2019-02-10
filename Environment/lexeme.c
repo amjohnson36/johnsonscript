@@ -1,5 +1,5 @@
 /* Program written by Alex Johnson
-/  1/25/2019 - CS 403 - Dr. Lusth
+/  2/10/2019 - CS 403 - Dr. Lusth
 /  lexeme.c contains the lexeme object and helper functions, including
 /  constructors, variable accessors, and object displayer.
 */
@@ -90,8 +90,8 @@ void displayLexeme(Lexeme* l)
     if (strcmp(getLexemeType(l), STRING) == 0) printf(": %s", getLexemeString(l));
     if (strcmp(getLexemeType(l), BOOLEAN) == 0) printf(": %s", getLexemeString(l));
     if (strcmp(getLexemeType(l), ID) == 0) printf(": %s", getLexemeString(l));
-    if (strcmp(getLexemeType(l), ERROR) == 0) printf(": %s on line %d",
-                                                getLexemeString(l), getLexemeInt(l));
+    if (strcmp(getLexemeType(l), ERROR) == 0) printf(": %s",
+                                                getLexemeString(l));
 
     //printf("\n");
 }

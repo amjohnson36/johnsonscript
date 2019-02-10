@@ -1,11 +1,10 @@
 /* Program written by Alex Johnson
-/  2/01/2019 - CS 403 - Dr. Lusth
-/  To use, run "recognizer <f>" where <f> is the name of the file to be scanned.
+/  2/10/2019 - CS 403 - Dr. Lusth
+/  To use, run "environement".
 */
 
 #include "types.h"
 #include "lexeme.h"
-#include "lex.h"
 #include "environment.h"
 
 #include <stdio.h>

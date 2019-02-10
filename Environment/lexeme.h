@@ -1,5 +1,5 @@
 /* Program written by Alex Johnson
-/  1/25/2019 - CS 403 - Dr. Lusth
+/  2/10/2019 - CS 403 - Dr. Lusth
 /  lexeme.h contains function declarations for the lexeme.c file.
 */
 

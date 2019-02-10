@@ -21,7 +21,7 @@ environment.o : environment.c environment.h
 				gcc $(OOPTS) environment.c
 
 run           : environment
-				./environment
+				-./environment
 
 clean	      :
 				rm -f $(OBJS) environment 

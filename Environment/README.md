@@ -66,6 +66,7 @@ Searches through the environment scope to find the matching ID. When that ID is 
 Extends the current environment to a new scope. All of the variables in the current environment are also copied over into the new environment so that functions can use variables in 
 the outer scope but not vice versa.
  
-<h3> displayEnvironment(Lexeme* env) </h3>
+<h3> displayEnvironment(Lexeme* env, int local) </h3>
 Goes through the environments starting at the innermost scope and displays all the variables and their values associated with them.
+If the int local is not zero then it will strictly display the local environment.
 

@@ -1,5 +1,5 @@
 /* Program written by Alex Johnson
-/  1/25/2019 - CS 403 - Dr. Lusth
+/  2/10/2019 - CS 403 - Dr. Lusth
 /  types.c contains the assignment of the global variables declared in types.h.
 /  These variables are all the different types that a lexeme could be.
 */

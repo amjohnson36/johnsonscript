@@ -1,3 +1,8 @@
+/* Program written by Alex Johnson
+/  2/10/2019 - CS 403 - Dr. Lusth
+/  environment.c contains functions for creating environments for the programming language.
+*/
+
 #include "lexeme.h"
 #include "types.h"
 #include "environment.h"
@@ -8,33 +13,63 @@
 
 int envDemo()
 {
+    Lexeme* env;
+    Lexeme* var;
+    Lexeme* val;
+
+    Lexeme* vars;
+    Lexeme* vals;
+
+    Lexeme* find;
+
+
     printf("Creating a new environment\n");
-    Lexeme* env = newEnvironment();
-    displayEnvironment(env);
+    env = newEnvironment();
+    displayEnvironment(env, 0);
 
     printf("\nAdding variable x with value 3\n");
-    Lexeme* var = newLexemeWord(ID, "x");
-    Lexeme* val = newLexemeWord(INTEGER, "3");
+    var = newLexemeWord(ID, "x");
+    val = newLexemeWord(INTEGER, "3");
     insertEnvironment(env, var, val);
 
-    displayEnvironment(env);
+    displayEnvironment(env, 0);
 
     printf("\nExtending the environment with y: 4 and z: \"hello\"\n");
 
-
-    env = extend(env, car(car(env)), cdr(car(env)));
-
-    var = newLexemeWord(ID, "y");
-    val = newLexemeWord(INTEGER, "4");
-    insertEnvironment(env, var, val);
+    vars = cons(TABLE, newLexemeWord(ID, "y"), NULL);
+    vals = cons(TABLE, newLexemeWord(INTEGER, "4"), NULL);
+    env = extend(env, vars, vals);
 
     var = newLexemeWord(ID, "z");
     val = newLexemeWord(STRING, "hello");
     insertEnvironment(env, var, val);
-    
 
-    displayEnvironment(env);
+    displayEnvironment(env, 0);
 
+    printf("\nUpdating the variable y to be equal to 7\n");
+    var = newLexemeWord(ID, "y");
+    val = newLexemeWord(INTEGER, "7");
+
+    updateVal(env, var, val);
+
+    displayEnvironment(env, 0);
+
+    printf("\nDisplaying just the local environment\n");
+    displayEnvironment(env, 1);
+
+    printf("\nSearching for the value x\n");
+    var = newLexemeWord(ID, "x");
+    find = getVal(env, var);
+    printf("x is ");
+    displayLexeme(find);
+    printf("\n");
+
+    printf("\nSearching for the value w\n");
+    var = newLexemeWord(ID, "w");
+    find = getVal(env, var);
+    printf("w is ");
+    displayLexeme(find);
+    printf("\n");
 
     return 0;
 }
@@ -68,8 +103,8 @@ Lexeme* getVal(Lexeme* env, Lexeme* id)
         env = cdr(env);
     }
     Lexeme* new = newLexemeError(ERROR, "Undefined Variable Error", 0);
-    displayLexeme(new);
-    exit(-1);
+    return new;
+    //displayLexeme(new);
 }
 
 Lexeme* updateVal(Lexeme* env, Lexeme* id, Lexeme* val)
@@ -91,8 +126,9 @@ Lexeme* updateVal(Lexeme* env, Lexeme* id, Lexeme* val)
         env = cdr(env);
     }
     Lexeme* new = newLexemeError(ERROR, "Undefined Variable Error", 0);
-    displayLexeme(new);
-    exit(-1);
+    return new;
+    //displayLexeme(new);
+    //exit(-1);
 }
 
 Lexeme* extend(Lexeme* env, Lexeme* ids, Lexeme* vals)
@@ -100,9 +136,17 @@ Lexeme* extend(Lexeme* env, Lexeme* ids, Lexeme* vals)
     return cons(ENV, cons(TABLE, ids, vals), env);
 }
 
-void displayEnvironment(Lexeme* env)
+void displayEnvironment(Lexeme* env, int local)
 {
-    printf("The environment is: \n");
+    int flag = 0;
+    if (cdr(env) != NULL) {
+        printf("The local environment is: \n");
+        flag = 1;
+    }
+    else {
+        printf("The environment is: \n");
+    }
+
     while (env != NULL) {
         Lexeme* vars = car(car(env));
         Lexeme* vals = cdr(car(env));
@@ -116,5 +160,11 @@ void displayEnvironment(Lexeme* env)
             vals = cdr(vals);
         }
         env = cdr(env);
+
+        if (local) break;
+        if (flag) {
+            printf("The environment is: \n");
+            flag = 0;
+        }
     }
 }
