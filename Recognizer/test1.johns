@@ -1,6 +1,6 @@
 # test1 file run with ./scanner test1 or make test1
 
-def equals(a, b) 
+def equals(var a, var b) 
 start 
     # This program checks if parameters a and b are equal to each other or not
 
