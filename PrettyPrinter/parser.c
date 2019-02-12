@@ -32,8 +32,7 @@ Lexeme* advance()
 
 Lexeme* match(char* type)
 {
-    // displayLexeme(CurrentLexeme);
-    // printf("\n");
+    // displayLexeme(CurrentLexeme); printf("\n");
     if (check(type)) {
         return advance();
     }
@@ -47,7 +46,7 @@ Lexeme* match(char* type)
         char* ftype = getLexemeType(CurrentLexeme);
         CurrentLexeme = newLexemeError(ERROR, "Syntax Error", LINE);
         displayLexeme(CurrentLexeme);
-        printf("expected %s, found %s\n", type, ftype);
+        printf("\nexpected %s, found %s\n", type, ftype);
         exit(-1);
     }
 }
@@ -179,13 +178,20 @@ Lexeme* unary()
     else if (check(OPAREN)) {
         match(OPAREN);
         tree = expression();
+        match(CPAREN);
         return cons(OPAREN, NULL, tree);
     }
+
+    // else if (check(CPAREN)) {
+    //     match(CPAREN);
+    //
+    // }
 
     else if (check(PRINT)) {
         match(PRINT);
         match(OPAREN);
         tree = expression();
+        match(CPAREN);
         return cons(PRINT, NULL, tree);
     }
 

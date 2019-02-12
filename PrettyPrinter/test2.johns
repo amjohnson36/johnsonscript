@@ -14,7 +14,7 @@ start
             print("Fizz").
         stop
 
-        else if (number % 5 != 0) start
+        else if (number % 5 == 0) start
             print("Buzz").
         stop
 

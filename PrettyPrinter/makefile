@@ -29,7 +29,7 @@ pretty.o      : pretty.c pretty.h
 test1         : pretty
 				@echo Original file:
 				@cat test1.johns
-				@Echo Pretty Printed version of the original:
+				@echo Pretty Printed version of the original:
 				@pp test1.johns > test1.pp.1
 				@cat test1.pp.1
 				@echo Pretty Printed version of the pretty printed version:
@@ -40,7 +40,7 @@ test1         : pretty
 test2         : pretty
 				@echo Original file:
 				@cat test2.johns
-				@Echo Pretty Printed version of the original:
+				@echo Pretty Printed version of the original:
 				@pp test2.johns > test2.pp.1
 				@cat test2.pp.1
 				@echo Pretty Printed version of the pretty printed version:
@@ -51,7 +51,7 @@ test2         : pretty
 test3         : pretty
 				@echo Original file:
 				@cat test3.johns
-				@Echo Pretty Printed version of the original:
+				@echo Pretty Printed version of the original:
 				@pp test3.johns > test3.pp.1
 				@cat test3.pp.1
 				@echo Pretty Printed version of the pretty printed version:
@@ -60,7 +60,9 @@ test3         : pretty
 				diff -s -q test3.pp.1 test3.pp.2
 
 run           : pretty
-				-./pp 
+				make test1
+				make test2
+				make test3
 
 clean	      :
-				rm -f $(OBJS) pp
+				rm -f $(OBJS) test1.pp.* test2.pp.* test3.pp.* pp

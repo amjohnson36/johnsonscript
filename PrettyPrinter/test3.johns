@@ -1,5 +1,5 @@
 
-def  recursiveFib(number)
+def recursiveFib(var number)
 start
     if (number == 0) start
         return 0.

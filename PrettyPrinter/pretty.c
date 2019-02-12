@@ -9,7 +9,13 @@
 
 void prettyPrint(Lexeme* tree)
 {
+
+    if (tree == NULL) return;
+
+    //printf("\nlexeme: ");displayLexeme(tree); printf("\n");
     char* type = getLexemeType(tree);
+
+
 
     if (strcmp(type, PROGRAM) == 0) {
         prettyPrint(car(tree));
@@ -21,7 +27,7 @@ void prettyPrint(Lexeme* tree)
         printf("var ");
         prettyPrint(car(tree));
         prettyPrint(cdr(tree));
-        printf(".");
+        printf(". ");
     }
 
     else if (strcmp(type, VARASSIGN) == 0) {
@@ -68,15 +74,21 @@ void prettyPrint(Lexeme* tree)
         prettyPrint(car(tree));
         printf(")");
         prettyPrint(cdr(tree));
-        //printf(".");
     }
 
     else if (strcmp(type, ELSESTATEMENT) == 0) {
         prettyPrint(car(tree));
         if (cdr(tree) != NULL) {
-            printf("else");
+            printf("else ");
             prettyPrint(cdr(tree));
         }
+    }
+
+    else if (strcmp(type, WHILELOOP) == 0) {
+        printf("while (");
+        prettyPrint(car(tree));
+        printf(")");
+        prettyPrint(cdr(tree));
     }
 
     else if (strcmp(type, INTEGER) == 0) {
@@ -102,13 +114,15 @@ void prettyPrint(Lexeme* tree)
     }
 
     else if (strcmp(type, PRINT) == 0) {
-        printf("print ");
+        printf("print (");
         prettyPrint(cdr(tree));
+        printf("). ");
     }
 
     else if (strcmp(type, RETURN) == 0) {
         printf("return ");
         prettyPrint(cdr(tree));
+        printf(". ");
     }
 
     else if (strcmp(type, NOT) == 0) {
@@ -168,6 +182,7 @@ void prettyPrint(Lexeme* tree)
         prettyPrint(car(tree));
         printf(" = ");
         prettyPrint(cdr(tree));
+        printf(". ");
     }
 
     else if (strcmp(type, GREATERTHAN) == 0) {
@@ -200,7 +215,6 @@ void printStatements(Lexeme* tree)
 {
     while (tree != NULL) {
         prettyPrint(car(tree));
-        //printf("\n");
         tree = cdr(tree);
     }
 }
@@ -218,8 +232,12 @@ void printIDList(Lexeme* tree)
 
 void printEXPList(Lexeme* tree)
 {
-    while (tree != NULL)
-        break;
+    while (tree != NULL) {
+        prettyPrint(car(tree));
+        if (cdr(tree) != NULL)
+            printf(", ");
+        tree = cdr(tree);
+    }
 }
 
 void printBlock(Lexeme* tree)

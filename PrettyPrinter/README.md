@@ -42,31 +42,24 @@ The makefile currently accepts the following commands:<br/>
 -make: builds the project into the executable<br/>
 -make run: builds the project and runs 5 tests. test5.johns is designed to fail
 
-<h2> Environment Functions </h2>
-The following functions are used in the Environment milestone:<br/>
+<h2> Pretty Printer Test Filess </h2>
+The following test files are provided in the Pretty Printer milestone and are run with $make testx:<br/>
 
-<h3> envDemo() </h3>
-Returns an instance of an environment demo. Shows off all the functions used in environment such as 
-making a new environment, inserting, extending, and updating.
+<h3> test1 </h3>
+Expected output (no newline) <br/>:
+def equals(var a, var b) start if (a == b) start return True.  stop else  
+start return False.  stop  stop 
 
-<h3> newEnvironment() </h3>
-Returns a new environment lexeme for storing variables. Initially the left pointer is an empty table and the right pointer is null.
+<h3> test2 </h3>
+Expected output (no newline) <br/>:
+def fizzBuzz() start var number = 1. while (number < 100) start if 
+((number % 3 == 0) and (number % 5 == 0)) start print ("FizzBuzz").  
+stop else if (number % 3 == 0) start print ("Fizz").  stop else if 
+(number % 5 == 0) start print ("Buzz").  stop else  start print (number).  stop 
+print ("\n"). number = number + 1.  stop  stop 
 
-<h3> insertEnvironment(Lexeme* env, Lexeme* id, Lexeme* value) </h3>
-Inserts the given variable and its value into the specified environment. The id is inserted as a new ID on the left pointer of the table and the value
-is inserted as a new [type] on the right side of the table. The inserted value is returned.
-
-<h3> getVal(Lexeme* env, Lexeme* id) </h3>
-Searches through the environment scope to find the matching ID. When that ID is found, the value associated with that ID is returned. If it is not found an error will be thrown.
-
-<h3> updateVal(Lexeme* env, Lexeme* id, Lexeme* val) </h3>
-Searches through the environment scope to find the matching ID. When that ID is found, the value associated with that ID is updated to val. If it is not found an error will be thrown.
-
-<h3> extend(Lexeme* env, Lexeme* vars, Lexeme* vals) </h3>
-Extends the current environment to a new scope. All of the variables in the current environment are also copied over into the new environment so that functions can use variables in 
-the outer scope but not vice versa.
- 
-<h3> displayEnvironment(Lexeme* env, int local) </h3>
-Goes through the environments starting at the innermost scope and displays all the variables and their values associated with them.
-If the int local is not zero then it will strictly display the local environment.
-
+<h3> test3 </h3>
+Expected output (no newline) <br/>:
+def recursiveFib(var number) start if (number == 0) start return 0.  
+stop if (number == 1) start return 1.  stop return 
+recursiveFib(number - 1) + recursiveFib(number - 2).  stop 
