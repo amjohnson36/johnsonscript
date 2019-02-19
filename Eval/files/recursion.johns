@@ -2,16 +2,29 @@
 
 def recur(var num)
 start
-    print(num).
+    #print(num).
     var return.
     
     if (num == 0) start
         return = 0.
     stop
     
-    else start 
-        return = recur(num - 1).
+    else if (num == 1) start 
+        return = 1.
+    stop
+
+    else start
+        return = recur(num-1) + recur(num-2).
     stop
 stop
 
-var n = recur(5).
+def check(var num)
+start
+    var i = 0.
+    while (i < num) start
+        print(recur(i)).
+        i = i + 1.
+    stop
+stop
+
+check(15).

@@ -55,7 +55,11 @@ Lexeme* program()
 {
     Lexeme* d;
     Lexeme* p;
-    d = definition();
+    if (definitionPending())
+        d = definition();
+    else if (statementPending())
+        d = statement();
+
     if (programPending())
         p = program();
     else
@@ -373,7 +377,7 @@ Lexeme* whileLoop()
 // Implement the _Pending functions
 int programPending()
 {
-    return definitionPending();
+    return definitionPending() || statementPending();
 }
 
 int definitionPending()

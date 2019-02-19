@@ -15,7 +15,7 @@ Lexeme* eval(Lexeme* tree, Lexeme* env)
 
     if (tree == NULL) return NULL;
 
-    printf("\nlexeme: ");displayLexeme(tree); printf("\n");
+    //printf("\nlexeme: ");displayLexeme(tree); printf("\n");
     char* type = getLexemeType(tree);
 
     // Simple types, return the tree
@@ -132,6 +132,13 @@ Lexeme* eval(Lexeme* tree, Lexeme* env)
             tree = cdr(tree);
         }
         return result;
+    }
+
+    else if (strcmp(type, ERROR) == 0) {
+        printf("\nIllegal\n");
+        displayLexeme(tree);
+        printf("\n");
+        exit(-1);
     }
 
     else {
@@ -285,7 +292,11 @@ Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
             }
 
     else if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -323,7 +334,11 @@ Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -331,11 +346,15 @@ Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
 {
     Lexeme* left = eval(car(tree), env);
     Lexeme* right = eval(cdr(tree), env);
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -346,7 +365,11 @@ Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -358,7 +381,11 @@ Lexeme* evalTimes(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -369,7 +396,11 @@ Lexeme* evalTimes(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -381,7 +412,11 @@ Lexeme* evalDivides(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -392,7 +427,11 @@ Lexeme* evalDivides(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -404,7 +443,11 @@ Lexeme* evalModulus(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -415,7 +458,11 @@ Lexeme* evalModulus(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -428,7 +475,11 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     char rval[6]; // Going to return a true or false lexeme
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -466,7 +517,11 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -479,7 +534,11 @@ Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
     char rval[6];
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -494,7 +553,11 @@ Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 
@@ -507,7 +570,11 @@ Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
     char rval[6];
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -522,7 +589,11 @@ Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        return newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
     }
 }
 

@@ -1,14 +1,13 @@
-# test1 file run with ./scanner test1 or make test1
+# File to demonstrate semantic error of using * between two string
+# make error5 : Displays the file
+# make error5x: Executes the file
 
-def equals(var a, var b) 
-start 
-    # This program checks if parameters a and b are equal to each other or not
-
-    if (a == b) start
-        return True.
-    stop
-    
-    else start
-        return False.
-    stop
+def error5()
+start
+    myString = "hello, ".
+    myString2 = "world!".
+    print(myString + myString2).
+    print(myString * myString2).
 stop
+
+var c = error5().

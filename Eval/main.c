@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 
     Lexeme* tree = parse();
     Lexeme* env = newEnvironment();
-    printLevelOrder(tree);
+    //printLevelOrder(tree);
 
     eval(tree, env);
 
