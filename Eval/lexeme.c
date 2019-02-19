@@ -92,8 +92,6 @@ void displayLexeme(Lexeme* l)
     if (strcmp(getLexemeType(l), ID) == 0) printf(": %s", getLexemeString(l));
     if (strcmp(getLexemeType(l), ERROR) == 0) printf(": %s on line %d",
                                     getLexemeString(l), getLexemeInt(l));
-
-    //printf("\n");
 }
 
 Lexeme* cons(char* type, Lexeme* left, Lexeme* right)

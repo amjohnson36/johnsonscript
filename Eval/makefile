@@ -6,7 +6,7 @@ LOPTS = -Wall -Wextra -g -std=c99
 all           : johnsonscript
 
 johnsonscript : $(OBJS) main.c
-				gcc $(LOPTS) $(OBJS) main.c -o johnsonscript
+				gcc $(LOPTS) $(OBJS) tree.c main.c -o johnsonscript
  
 lex.o         : lex.c lex.h
 				gcc $(OOPTS) lex.c

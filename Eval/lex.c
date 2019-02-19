@@ -121,9 +121,6 @@ Lexeme* lexVariableOrKeyword(FILE* fp)
     else if (strcmp(buffer, "print") == 0) {
         return newLexemeWord(PRINT, buffer);
     }
-    else if (strcmp(buffer, "return") == 0) {
-        return newLexemeWord(RETURN, buffer);
-    }
     else if (strcmp(buffer, "var") == 0) {
         return newLexemeWord(VAR, buffer);
     }
@@ -173,6 +170,7 @@ Lexeme* lexString(FILE* fp)
         ch = getc(fp);
     }
     if (ch == EOF) return newLexemeError(ERROR, "Bad String Error", LINE);
+    printf("%s", buffer);
     return newLexemeWord(STRING, buffer);
 }
 

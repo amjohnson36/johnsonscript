@@ -1,14 +1,17 @@
-# test1 file run with ./scanner test1 or make test1
 
-def equals(var a, var b) 
-start 
-    # This program checks if parameters a and b are equal to each other or not
 
-    if (a == b) start
-        return True.
+def recur(var num)
+start
+    print(num).
+    var return.
+    
+    if (num == 0) start
+        return = 0.
     stop
     
-    else start
-        return False.
+    else start 
+        return = recur(num - 1).
     stop
 stop
+
+var n = recur(5).

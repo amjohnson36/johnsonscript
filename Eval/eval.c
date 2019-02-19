@@ -117,13 +117,21 @@ Lexeme* eval(Lexeme* tree, Lexeme* env)
         return evalFuncCall(tree, env);
     }
 
+    else if (strcmp(type, PRINT) == 0) {
+        return evalPrint(tree, env);
+    }
+
     else if (strcmp(type, BLOCK) == 0) {
         return evalBlock(tree, env);
     }
 
     else if (strcmp(type, PROGRAM) == 0) {
-        eval(car(tree), env);
-        return eval(cdr(tree), env);
+        Lexeme* result;
+        while (tree != NULL) {
+            result = eval(car(tree), env);
+            tree = cdr(tree);
+        }
+        return result;
     }
 
     else {
@@ -200,12 +208,10 @@ Lexeme* getClosureEnvironment(Lexeme* closure)
 
 Lexeme* evalArgs(Lexeme* args, Lexeme* env)
 {
-    Lexeme* iter = args;
-    while (iter != NULL) {
-        eval(car(iter), env);
-        iter = cdr(iter);
-    }
-    return args;
+    if (args == NULL)
+        return NULL;
+
+    return cons(JOIN, eval(car(args), env), evalArgs(cdr(args), env));
 }
 
 Lexeme* evalPrint(Lexeme* tree, Lexeme* env)
@@ -213,29 +219,29 @@ Lexeme* evalPrint(Lexeme* tree, Lexeme* env)
     Lexeme* result = eval(cdr(tree), env);
     char* rtype = getLexemeType(result);
 
-    if (strcmp(INTEGER, rtype) == 0) {
-        printf("%d", getLexemeInt(result));
+    if (result == NULL) {
+        printf("NULL\n");
+        return NULL;
+    }
+
+    else if (strcmp(INTEGER, rtype) == 0) {
+        printf("%d\n", getLexemeInt(result));
         return result;
     }
 
     else if (strcmp(STRING, rtype) == 0) {
-        printf("\"%s\"", getLexemeString(result));
+        printf("%s\n", getLexemeString(result));
         return result;
     }
 
     else if (strcmp(BOOLEAN, rtype) == 0) {
-        printf("\"%s\"", getLexemeString(result));
+        printf("%s\n", getLexemeString(result));
         return result;
     }
     else {
-        printf("didn't get that!\n");
+        printf("I didn't get that!\n");
         return result;
     }
-}
-
-Lexeme* evalReturn(Lexeme* tree, Lexeme* env)
-{
-    return eval(cdr(tree), env);
 }
 
 Lexeme* evalBlock(Lexeme* tree, Lexeme* env)
@@ -244,9 +250,6 @@ Lexeme* evalBlock(Lexeme* tree, Lexeme* env)
     tree = cdr(tree); // I stored my blocks kinda weird
     while (tree != NULL) {
         result = eval(car(tree), env);
-        if (strcmp(getLexemeType(result), RETURNED) == 0) {
-            return result;
-        }
         tree = cdr(tree);
     }
     return result;
@@ -257,23 +260,44 @@ Lexeme* evalBlock(Lexeme* tree, Lexeme* env)
 // Functions for evaluating simple operations
 Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
 
-    if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
+    if (((strcmp(ltype, INTEGER) == 0) && (strcmp(rtype, STRING) == 0)) ||
+            ((strcmp(ltype, STRING) == 0) && (strcmp(rtype, INTEGER) == 0))) {
+                // One of the values is a string, the other is a integer
+                if (strcmp(ltype, INTEGER) == 0) {
+                    int a = getLexemeInt(left);
+                    char* b = getLexemeString(right);
+                    char buffer[strlen(b) + 65];
+                    sprintf(buffer, "%d%s", a, b);
+                    return newLexemeWord(STRING, buffer);
+                }
+                if (strcmp(rtype, INTEGER) == 0) {
+                    char* a = getLexemeString(left);
+                    int b = getLexemeInt(right);
+                    char buffer[strlen(a) + 65];
+                    sprintf(buffer, "%s%d", a, b);
+                    return newLexemeWord(STRING, buffer);
+                }
+            }
+
+    else if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
         return newLexemeError(ERROR, "Bad Operation Error", LINE);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree)) + getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left) + getLexemeInt(right);
         char buffer[64];
         sprintf(buffer, "%d", a);
         return newLexemeWord(INTEGER, buffer);
     }
 
     else if (strcmp(ltype, STRING) == 0) {
-        char* a = getLexemeString(car(tree));
-        char* b = getLexemeString(cdr(tree));
+        char* a = getLexemeString(left);
+        char* b = getLexemeString(right);
         char* new = malloc(strlen(a) + strlen(b) + 1);
         strcpy(new, a);
         strcat(new, b);
@@ -281,13 +305,13 @@ Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, BOOLEAN) == 0) {
-        if (strcmp(getLexemeString(car(tree)), "True") == 0) {
+        if (strcmp(getLexemeString(left), "True") == 0) {
             // True + True/False == True
             return newLexemeWord(BOOLEAN, getLexemeString(car(tree)));
         }
 
         else {
-            if (strcmp(getLexemeString(cdr(tree)), "True") == 0) {
+            if (strcmp(getLexemeString(right), "True") == 0) {
             // True + True/False == True
                 return newLexemeWord(BOOLEAN, getLexemeString(cdr(tree)));
             }
@@ -305,6 +329,8 @@ Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
 {
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
     char* ltype = getLexemeType(car(tree));
     char* rtype = getLexemeType(cdr(tree));
 
@@ -313,7 +339,7 @@ Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree)) - getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left) - getLexemeInt(right);
         char buffer[64];
         sprintf(buffer, "%d", a);
         return newLexemeWord(INTEGER, buffer);
@@ -326,15 +352,17 @@ Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalTimes(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
         return newLexemeError(ERROR, "Bad Operation Error", LINE);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree)) * getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left) * getLexemeInt(right);
         char buffer[64];
         sprintf(buffer, "%d", a);
         return newLexemeWord(INTEGER, buffer);
@@ -347,15 +375,17 @@ Lexeme* evalTimes(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalDivides(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
         return newLexemeError(ERROR, "Bad Operation Error", LINE);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree)) / getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left) / getLexemeInt(cdr(tree));
         char buffer[64];
         sprintf(buffer, "%d", a);
         return newLexemeWord(INTEGER, buffer);
@@ -368,15 +398,17 @@ Lexeme* evalDivides(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalModulus(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
         return newLexemeError(ERROR, "Bad Operation Error", LINE);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree)) % getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left) % getLexemeInt(right);
         char buffer[64];
         sprintf(buffer, "%d", a);
         return newLexemeWord(INTEGER, buffer);
@@ -389,8 +421,10 @@ Lexeme* evalModulus(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
     char rval[6]; // Going to return a true or false lexeme
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
@@ -398,8 +432,9 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        if (getLexemeInt(car(tree)) == getLexemeInt(cdr(tree)))
+        if (getLexemeInt(left) == getLexemeInt(right))
             strcpy(rval, "True");
+
         else
             strcpy(rval, "False");
 
@@ -407,8 +442,8 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, STRING) == 0) {
-        char* a = getLexemeString(car(tree));
-        char* b = getLexemeString(cdr(tree));
+        char* a = getLexemeString(left);
+        char* b = getLexemeString(right);
         if (strcmp(a, b) == 0)
             strcpy(rval, "True");
 
@@ -419,8 +454,8 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, BOOLEAN) == 0) {
-        char* a = getLexemeString(car(tree));
-        char* b = getLexemeString(cdr(tree));
+        char* a = getLexemeString(left);
+        char* b = getLexemeString(right);
         if (strcmp(a, b) == 0)
             strcpy(rval, "True");
 
@@ -437,8 +472,10 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
     char rval[6];
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
@@ -446,8 +483,8 @@ Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree));
-        int b = getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left);
+        int b = getLexemeInt(right);
         if (a > b)
             strcpy(rval, "True");
         else
@@ -463,8 +500,10 @@ Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
 {
-    char* ltype = getLexemeType(car(tree));
-    char* rtype = getLexemeType(cdr(tree));
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
     char rval[6];
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
@@ -472,8 +511,8 @@ Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
-        int a = getLexemeInt(car(tree));
-        int b = getLexemeInt(cdr(tree));
+        int a = getLexemeInt(left);
+        int b = getLexemeInt(right);
         if (a < b)
             strcpy(rval, "True");
         else
@@ -541,8 +580,9 @@ Lexeme* evalOr(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalNot(Lexeme* tree, Lexeme* env)
 {
-    Lexeme* result = eval(cdr(tree), env);
+    Lexeme* result = eval(cdr(cdr(tree)), env); //not -> oparen -> expression
     char rval[6];
+    displayLexeme(result); printf("\n");
     if (strcmp(getLexemeString(result), "True") == 0) {
         strcpy(rval, "False");
         return newLexemeWord(BOOLEAN, rval);
@@ -561,18 +601,36 @@ Lexeme* evalAt(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalVarDef(Lexeme* tree, Lexeme* env)
 {
-
-
+    if (cdr(tree) == NULL) { // defined like var x.
+        return insertEnvironment(env, car(tree), NULL);
+    }
+    else {
+        Lexeme* result = eval(cdr(cdr(tree)), env);
+        return insertEnvironment(env, car(tree), result);
+    }
 }
 
 Lexeme* evalIf(Lexeme* tree, Lexeme* env)
 {
-
-
+    Lexeme* condition = eval(car(tree), env);
+    if (strcmp(getLexemeString(condition), "True") == 0 ||
+        (getLexemeInt(condition) != 0)) { // If statement evaluated to True
+            return eval(car(cdr(tree)), env);
+        }
+    else { // Condition evaluated to false, run else block
+        if (cdr(cdr(tree)) != NULL)
+            return eval(cdr(cdr(tree)), env);
+    }
 }
 
 Lexeme* evalWhile(Lexeme* tree, Lexeme* env)
 {
-
-
+    Lexeme* condition = eval(car(tree), env);
+    Lexeme* result;
+    while (strcmp(getLexemeString(condition), "True") == 0 ||
+        (getLexemeInt(condition) != 0)) { // While statement evaluated to True
+            result = eval(cdr(tree), env);
+            condition = eval(car(tree), env);
+        }
+    return result;
 }

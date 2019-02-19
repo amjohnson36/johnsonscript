@@ -1,14 +1,11 @@
-# test1 file run with ./scanner test1 or make test1
+# File to demonstrate syntax error of not surrounding print with parenthesis 
+# make error3 : Displays the file
+# make error3x: Executes the file
 
-def equals(var a, var b) 
-start 
-    # This program checks if parameters a and b are equal to each other or not
-
-    if (a == b) start
-        return True.
-    stop
-    
-    else start
-        return False.
-    stop
+def error(var num)
+start
+    print "This is my function". # improper
+    var num = num * 5.
+    print("num is " + num). # proper
 stop
+

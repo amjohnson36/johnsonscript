@@ -32,17 +32,17 @@ Lexeme* advance()
 
 Lexeme* match(char* type)
 {
-    // displayLexeme(CurrentLexeme); printf("\n");
     if (check(type)) {
         return advance();
     }
     else if (strcmp(getLexemeType(CurrentLexeme), ERROR) == 0) {
-        printf("Illegal\n");
+        printf("\nIllegal\n");
          displayLexeme(CurrentLexeme);
+         printf("\n");
          exit(-1);
     }
     else {
-        printf("Illegal\n");
+        printf("\nIllegal\n");
         char* ftype = getLexemeType(CurrentLexeme);
         CurrentLexeme = newLexemeError(ERROR, "Syntax Error", LINE);
         displayLexeme(CurrentLexeme);
@@ -191,12 +191,6 @@ Lexeme* unary()
         tree = expression();
         match(CPAREN);
         return cons(PRINT, NULL, tree);
-    }
-
-    else if (check(RETURN)) {
-        match(RETURN);
-        tree = expression();
-        return cons(RETURN, NULL, tree);
     }
 
     else if (check(NOT)) {
@@ -412,7 +406,7 @@ int operatorPending()
 int unaryPending()
 {
     return idDefPending() || check(INTEGER) || check(BOOLEAN) || check(STRING)
-            || check(OPAREN) || check(PRINT) || check(RETURN);
+            || check(OPAREN) || check(PRINT);
 }
 
 int idDefPending()

@@ -1,14 +1,20 @@
-# test1 file run with ./scanner test1 or make test1
+# File to demonstrate semantic error of using != instead of not keyword
+# make error4 : Displays the file
+# make error4x: Executes the file
 
-def equals(var a, var b) 
-start 
-    # This program checks if parameters a and b are equal to each other or not
-
-    if (a == b) start
-        return True.
+def error4(var num)
+start
+    if (not (num == 1)) start
+        print("Using not keyword. num is not equal to 1.  ").
     stop
-    
+
+    else if (num != 1) start
+        print("num is still not equal to 1").
+    stop
+
     else start
-        return False.
+        print("num is " + num).
     stop
 stop
+
+var c = error4(2).

@@ -31,7 +31,6 @@ extern char* IF;
 extern char* ELSE;
 extern char* WHILE;
 extern char* PRINT;
-extern char* RETURN;
 extern char* DEF;
 extern char* START;
 extern char* STOP;

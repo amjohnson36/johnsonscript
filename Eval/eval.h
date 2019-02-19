@@ -21,7 +21,6 @@ Lexeme* getClosureBody(Lexeme* closure);
 Lexeme* getClosureEnvironment(Lexeme* closure);
 Lexeme* evalArgs(Lexeme* args, Lexeme* env);
 Lexeme* evalPrint(Lexeme*, Lexeme*);
-Lexeme* evalReturn(Lexeme*, Lexeme*);
 
 Lexeme* evalBlock(Lexeme* tree, Lexeme* env);
 

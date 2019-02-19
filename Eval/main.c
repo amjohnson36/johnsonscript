@@ -8,10 +8,12 @@
 #include "environment.h"
 #include "parser.h"
 #include "eval.h"
+#include "tree.h"
 
 #include <stdio.h>
 
 FILE* fp; // Need a global file pointer
+
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +25,9 @@ int main(int argc, char* argv[])
 
     Lexeme* tree = parse();
     Lexeme* env = newEnvironment();
+    printLevelOrder(tree);
+
     eval(tree, env);
-    
+
     return 0;
 }

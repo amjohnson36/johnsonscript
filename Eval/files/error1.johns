@@ -1,19 +1,11 @@
-# test1 file run with ./scanner test1 or make test1
+# File to demonstrate syntax error of forgetting DOT at end of line
+# make error1 : Displays the file
+# make error1x: Executes the file
 
-def main()
+def error1(var num)
 start
-    def equals(var a, var b) 
-    start 
-        # This program checks if parameters a and b are equal to each other or not
-
-        if (a == b) start
-            return True.
-        stop
-    
-        else start
-            return False.
-        stop
-    stop
-    print(equals(1, 2)).
+    print("This is my function").
+    var num = num * 5.
+    print("num is " + num)
 stop
 

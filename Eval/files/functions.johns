@@ -5,16 +5,15 @@ def main()
 start
     def f(var x) 
     start 
-        lambda (y) { x + y }.
+        lambda (y) start x + y stop.
     stop
 
     var a = f(3).
     var b = f(11).
 
-    print("a(5) is ").
-    print(a(5)). # should be 8
-    print("\nb(6) is ").
-    print(b(6)). # should be 17
-    print("\na(10) is ").
-    print(a(10)). # should be 13
+    print("a(5) is " + a(5)). # should be 8
+    print("b(6) is " + b(6)). # should be 17
+    print("a(10) is " + a(10)). # should be 13
 stop
+
+var run = main().

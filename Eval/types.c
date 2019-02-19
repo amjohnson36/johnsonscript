@@ -31,7 +31,6 @@ char* IF = "if";
 char* ELSE = "else";
 char* WHILE = "while";
 char* PRINT = "print";
-char* RETURN = "return";
 char* DEF = "def";
 char* START = "start";
 char* STOP = "stop";
