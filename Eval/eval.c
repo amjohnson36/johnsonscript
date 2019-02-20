@@ -10,6 +10,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+int countCL;
+char** argsCL;
+
 Lexeme* eval(Lexeme* tree, Lexeme* env)
 {
 
@@ -28,6 +31,10 @@ Lexeme* eval(Lexeme* tree, Lexeme* env)
     }
 
     else if (strcmp(type, BOOLEAN) == 0) {
+        return tree;
+    }
+
+    else if (strcmp(type, FILEPOINTER) == 0) {
         return tree;
     }
 
@@ -121,8 +128,48 @@ Lexeme* eval(Lexeme* tree, Lexeme* env)
         return evalPrint(tree, env);
     }
 
+    else if (strcmp(type, NEWARRAY) == 0) {
+        return evalNewArray(tree, env);
+    }
+
+    else if (strcmp(type, GETARRAY) == 0) {
+        return evalGetArray(tree, env);
+    }
+
+    else if (strcmp(type, SETARRAY) == 0) {
+        return evalSetArray(tree, env);
+    }
+
+    else if (strcmp(type, GETARGCOUNT) == 0) {
+        return evalGetArgCount();
+    }
+
+    else if (strcmp(type, GETARG) == 0) {
+        return evalGetArg(tree, env);
+    }
+
+    else if (strcmp(type, OPENFILE) == 0) {
+        return evalOpenFile(tree, env);
+    }
+
+    else if (strcmp(type, READINTEGER) == 0) {
+        return evalReadInteger(tree, env);
+    }
+
+    else if (strcmp(type, ATFILEEND) == 0) {
+        return evalAtFileEnd(tree, env);
+    }
+
+    else if (strcmp(type, CLOSEFILE) == 0) {
+        return evalCloseFile(tree, env);
+    }
+
     else if (strcmp(type, BLOCK) == 0) {
         return evalBlock(tree, env);
+    }
+
+    else if (strcmp(type, OPAREN) == 0) {
+        return eval(cdr(tree), env);
     }
 
     else if (strcmp(type, PROGRAM) == 0) {
@@ -183,7 +230,8 @@ Lexeme* evalFuncCall(Lexeme* tree, Lexeme* env)
     Lexeme* eargs = evalArgs(args, env);
     Lexeme* xenv = extend(senv, params, eargs);
 
-    insertEnvironment(xenv, newLexemeWord(ID, THIS), xenv);
+    // insert a variable that points to xenv
+    insertEnvironment(xenv, newLexemeWord(ID, "this"), xenv);
 
     return eval(body, xenv);
 }
@@ -251,6 +299,148 @@ Lexeme* evalPrint(Lexeme* tree, Lexeme* env)
     }
 }
 
+Lexeme* evalNewArray(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 1);
+
+    Lexeme* size = car(eargs);
+    if (strcmp(getLexemeType(size), INTEGER) != 0) {
+        // Arg was not an integer
+        Lexeme* a = newLexemeError(ERROR, "Invalid Arguments Error", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+
+    Lexeme* array = newLexemeArray(ARRAY, getLexemeInt(size));
+    return array;
+}
+
+Lexeme* evalGetArray(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 2);
+
+    Lexeme* array = car(eargs);
+    Lexeme* size = car(cdr(eargs));
+    if ((strcmp(getLexemeType(array), ARRAY) != 0) ||
+            (strcmp(getLexemeType(size), INTEGER) != 0)) {
+        // Arg was not an integer
+        Lexeme* a = newLexemeError(ERROR, "Invalid Arguments Error", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+
+    return getLexemeArray(array, getLexemeInt(size));
+}
+
+Lexeme* evalSetArray(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 3);
+
+    Lexeme* array = car(eargs);
+    Lexeme* size = car(cdr(eargs));
+    Lexeme* val = car(cdr(cdr(eargs)));
+    if ((strcmp(getLexemeType(array), ARRAY) != 0) ||
+            (strcmp(getLexemeType(size), INTEGER) != 0)) {
+        // Arg was not an array or integer
+        Lexeme* a = newLexemeError(ERROR, "Invalid Arguments Error", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+    setLexemeArray(array, size, val);
+    return val;
+}
+
+int argsLength(Lexeme* tree)
+{
+    int count = 0;
+    while (tree != NULL) {
+        count++;
+        tree = cdr(tree);
+    }
+    return count;
+}
+
+void checkArgsLength(Lexeme* eargs, int num)
+{
+    if (argsLength(eargs) != num) {
+        // Incorrect number of args, throw error
+        Lexeme* a = newLexemeError(ERROR, "Invalid Arguments Error", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+}
+
+Lexeme* evalGetArgCount()
+{
+    char buffer[64];
+    sprintf(buffer, "%d", countCL);
+    return newLexemeWord(INTEGER, buffer);
+}
+
+Lexeme* evalGetArg(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 1);
+
+    Lexeme* index = car(eargs);
+    return newLexemeWord(STRING, argsCL[getLexemeInt(index)]);
+}
+
+Lexeme* evalOpenFile(Lexeme* tree, Lexeme* env)
+{
+
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 1);
+
+    Lexeme* fname = car(eargs);
+    Lexeme* f = newLexemeFP(FILEPOINTER, fname);
+    return f;
+}
+
+Lexeme* evalReadInteger(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 1);
+
+    FILE* f = getLexemeFP(car(eargs));
+    int a;
+    fscanf(f, "%d", &a);
+    char buffer[64];
+    sprintf(buffer, "%d", a);
+    return newLexemeWord(INTEGER, buffer);
+}
+
+Lexeme* evalAtFileEnd(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 1);
+
+    FILE* f = getLexemeFP(car(eargs));
+    if (feof(f)) return newLexemeWord(BOOLEAN, "True");
+    else return newLexemeWord(BOOLEAN, "False");
+}
+
+Lexeme* evalCloseFile(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* eargs = evalArgs(cdr(tree), env);
+    checkArgsLength(eargs, 1);
+
+    FILE* f = getLexemeFP(car(eargs));
+    fclose(f);
+    return newLexemeWord(BOOLEAN, "True");
+}
+
 Lexeme* evalBlock(Lexeme* tree, Lexeme* env)
 {
     Lexeme* result;
@@ -261,8 +451,6 @@ Lexeme* evalBlock(Lexeme* tree, Lexeme* env)
     }
     return result;
 }
-
-
 
 // Functions for evaluating simple operations
 Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
@@ -292,7 +480,7 @@ Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
             }
 
     else if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: +", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -334,12 +522,13 @@ Lexeme* evalPlus(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: +", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
         exit(-1);
     }
+    return NULL;
 }
 
 Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
@@ -350,7 +539,7 @@ Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: -", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -365,7 +554,7 @@ Lexeme* evalMinus(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: -", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -381,7 +570,7 @@ Lexeme* evalTimes(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: *", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -396,7 +585,7 @@ Lexeme* evalTimes(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: *", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -412,7 +601,7 @@ Lexeme* evalDivides(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: /", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -427,7 +616,7 @@ Lexeme* evalDivides(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: /", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -443,7 +632,7 @@ Lexeme* evalModulus(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(right);
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: %", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -458,7 +647,7 @@ Lexeme* evalModulus(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: %", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -475,7 +664,7 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     char rval[6]; // Going to return a true or false lexeme
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: ==", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -517,7 +706,7 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: ==", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -534,7 +723,7 @@ Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
     char rval[6];
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: >", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -553,7 +742,7 @@ Lexeme* evalGreaterThan(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: >", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -570,7 +759,7 @@ Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
     char rval[6];
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: <", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -589,7 +778,7 @@ Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
     }
 
     else { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error", LINE);
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: <", -1);
         printf("\nIllegal\n");
         displayLexeme(a);
         printf("\n");
@@ -600,10 +789,9 @@ Lexeme* evalLessThan(Lexeme* tree, Lexeme* env)
 Lexeme* evalAssign(Lexeme* tree, Lexeme* env)
 {
     Lexeme* val = eval(cdr(tree), env);
-
     if (strcmp(getLexemeType(car(tree)), AT) == 0) { // LHS is an object variable
         Lexeme* obj = eval(car(car(tree)), env);
-        updateVal(obj, car(cdr(tree)), val);
+        updateVal(obj, cdr(car(tree)), val);
     }
     else {
         updateVal(env, car(tree), val);
@@ -613,38 +801,63 @@ Lexeme* evalAssign(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalAnd(Lexeme* tree, Lexeme* env)
 {
-    if (strcmp(getLexemeString(car(tree)), "False") == 0) {
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
+
+    if ((strcmp(ltype, rtype) != 0) || (strcmp(ltype, BOOLEAN) != 0)) {
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: AND", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+
+    if (strcmp(getLexemeString(left), "False") == 0) {
         // False AND True/False == False
-        return newLexemeWord(BOOLEAN, getLexemeString(car(tree)));
+        return newLexemeWord(BOOLEAN, getLexemeString(left));
     }
 
     else {
-        if (strcmp(getLexemeString(cdr(tree)), "False") == 0) {
+        if (strcmp(getLexemeString(right), "False") == 0) {
             // True AND False == False
-            return newLexemeWord(BOOLEAN, getLexemeString(cdr(tree)));
+            return newLexemeWord(BOOLEAN, getLexemeString(right));
         }
         else {
         // True AND True = True
-            return newLexemeWord(BOOLEAN, getLexemeString(car(tree)));
+            return newLexemeWord(BOOLEAN, getLexemeString(left));
         }
     }
 }
 
 Lexeme* evalOr(Lexeme* tree, Lexeme* env)
 {
-    if (strcmp(getLexemeString(car(tree)), "True") == 0) {
+    Lexeme* left = eval(car(tree), env);
+    Lexeme* right = eval(cdr(tree), env);
+    char* ltype = getLexemeType(left);
+    char* rtype = getLexemeType(right);
+
+    if ((strcmp(ltype, rtype) != 0) || (strcmp(ltype, BOOLEAN) != 0)) {
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: OR", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+    if (strcmp(getLexemeString(left), "True") == 0) {
         // True OR True/False == True
-        return newLexemeWord(BOOLEAN, getLexemeString(car(tree)));
+        return newLexemeWord(BOOLEAN, getLexemeString(left));
     }
 
     else {
-        if (strcmp(getLexemeString(cdr(tree)), "True") == 0) {
+        if (strcmp(getLexemeString(right), "True") == 0) {
             // False OR True == True
-            return newLexemeWord(BOOLEAN, getLexemeString(cdr(tree)));
+            return newLexemeWord(BOOLEAN, getLexemeString(right));
         }
         else {
         // False OR False == False
-            return newLexemeWord(BOOLEAN, getLexemeString(car(tree)));
+            return newLexemeWord(BOOLEAN, getLexemeString(left));
         }
     }
 }
@@ -653,7 +866,7 @@ Lexeme* evalNot(Lexeme* tree, Lexeme* env)
 {
     Lexeme* result = eval(cdr(cdr(tree)), env); //not -> oparen -> expression
     char rval[6];
-    displayLexeme(result); printf("\n");
+
     if (strcmp(getLexemeString(result), "True") == 0) {
         strcpy(rval, "False");
         return newLexemeWord(BOOLEAN, rval);
@@ -666,6 +879,7 @@ Lexeme* evalNot(Lexeme* tree, Lexeme* env)
 
 Lexeme* evalAt(Lexeme* tree, Lexeme* env)
 {
+    // LHS must eval to object, RHS to variable
     Lexeme* object = eval(car(tree), env); // LHS is object
     return eval(cdr(tree), object); // objects == environments :O
 }
@@ -692,6 +906,7 @@ Lexeme* evalIf(Lexeme* tree, Lexeme* env)
         if (cdr(cdr(tree)) != NULL)
             return eval(cdr(cdr(tree)), env);
     }
+    return NULL;
 }
 
 Lexeme* evalWhile(Lexeme* tree, Lexeme* env)

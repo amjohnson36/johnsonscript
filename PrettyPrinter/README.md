@@ -46,12 +46,12 @@ The makefile currently accepts the following commands:<br/>
 The following test files are provided in the Pretty Printer milestone and are run with $make testx:<br/>
 
 <h3> test1 </h3>
-Expected output (no newline) <br/>:
+Expected output (no newline): <br/>
 def equals(var a, var b) start if (a == b) start return True.  stop else  
 start return False.  stop  stop 
 
 <h3> test2 </h3>
-Expected output (no newline) <br/>:
+Expected output (no newline): <br/>
 def fizzBuzz() start var number = 1. while (number < 100) start if 
 ((number % 3 == 0) and (number % 5 == 0)) start print ("FizzBuzz").  
 stop else if (number % 3 == 0) start print ("Fizz").  stop else if 
@@ -59,7 +59,7 @@ stop else if (number % 3 == 0) start print ("Fizz").  stop else if
 print ("\n"). number = number + 1.  stop  stop 
 
 <h3> test3 </h3>
-Expected output (no newline) <br/>:
+Expected output (no newline): <br/>
 def recursiveFib(var number) start if (number == 0) start return 0.  
 stop if (number == 1) start return 1.  stop return 
 recursiveFib(number - 1) + recursiveFib(number - 2).  stop 

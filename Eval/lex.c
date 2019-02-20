@@ -121,6 +121,33 @@ Lexeme* lexVariableOrKeyword(FILE* fp)
     else if (strcmp(buffer, "print") == 0) {
         return newLexemeWord(PRINT, buffer);
     }
+    else if (strcmp(buffer, "newarray") == 0) {
+        return newLexemeWord(NEWARRAY, buffer);
+    }
+    else if (strcmp(buffer, "getarray") == 0) {
+        return newLexemeWord(GETARRAY, buffer);
+    }
+    else if (strcmp(buffer, "setarray") == 0) {
+        return newLexemeWord(SETARRAY, buffer);
+    }
+    else if (strcmp(buffer, "getargcount") == 0) {
+        return newLexemeWord(GETARGCOUNT, buffer);
+    }
+    else if (strcmp(buffer, "getarg") == 0) {
+        return newLexemeWord(GETARG, buffer);
+    }
+    else if (strcmp(buffer, "openfile") == 0) {
+        return newLexemeWord(OPENFILE, buffer);
+    }
+    else if (strcmp(buffer, "readinteger") == 0) {
+        return newLexemeWord(READINTEGER, buffer);
+    }
+    else if (strcmp(buffer, "atfileend") == 0) {
+        return newLexemeWord(ATFILEEND, buffer);
+    }
+    else if (strcmp(buffer, "closefile") == 0) {
+        return newLexemeWord(CLOSEFILE, buffer);
+    }
     else if (strcmp(buffer, "var") == 0) {
         return newLexemeWord(VAR, buffer);
     }
@@ -170,7 +197,6 @@ Lexeme* lexString(FILE* fp)
         ch = getc(fp);
     }
     if (ch == EOF) return newLexemeError(ERROR, "Bad String Error", LINE);
-    printf("%s", buffer);
     return newLexemeWord(STRING, buffer);
 }
 

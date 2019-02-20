@@ -1,0 +1,18 @@
+
+
+def objects()
+start
+    print("Creating object a with a@number=10 and a@string='hello'").
+    var a = myObject(10, "hello").
+    print("a@number is " + a@number + ", a@string is " + a@string).
+    print("Setting a@number = a@anumber + 5").
+    a@number = a@number + 5.
+    print("a@number is " + a@number + ", a@string is " + a@string).
+stop
+
+def myObject(var number, var string)
+start
+    this.
+stop
+
+objects().

@@ -1,14 +1,14 @@
-# File to demonstrate semantic error of using != instead of not keyword
-# make error4 : Displays the file
-# make error4x: Executes the file
+# Program to demonstrate semantic error of using != instead of not keyword (line 11)
+# make error4 : Displays the program
+# make error4x: Executes the program
 
 def error4(var num)
 start
-    if (not (num == 1)) start
-        print("Using not keyword. num is not equal to 1.  ").
+    if (not (num == 1)) start # valid
+        print("Using not keyword. num is not equal to 1"). 
     stop
 
-    else if (num != 1) start
+    else if (num != 1) start # invalid
         print("num is still not equal to 1").
     stop
 

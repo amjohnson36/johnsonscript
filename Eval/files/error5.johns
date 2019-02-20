@@ -1,13 +1,13 @@
-# File to demonstrate semantic error of using * between two string
-# make error5 : Displays the file
-# make error5x: Executes the file
+# Program to demonstrate semantic error of using * between two string (line 10)
+# make error5 : Displays the program
+# make error5x: Executes the program
 
 def error5()
 start
-    myString = "hello, ".
-    myString2 = "world!".
+    var myString = "hello, ".
+    var myString2 = "world!".
     print(myString + myString2).
-    print(myString * myString2).
+    print(myString * myString2). # invalid
 stop
 
 var c = error5().

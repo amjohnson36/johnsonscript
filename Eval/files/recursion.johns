@@ -1,8 +1,9 @@
+# Program to demonstrate recursion. Prints recursive fibonacci numbers from 0 - 15
+# make recursion : Displays the program
+# make recursionx: Executes the program
 
-
-def recur(var num)
+def fib(var num)
 start
-    #print(num).
     var return.
     
     if (num == 0) start
@@ -14,17 +15,17 @@ start
     stop
 
     else start
-        return = recur(num-1) + recur(num-2).
+        return = fib(num-1) + fib(num-2).
     stop
 stop
 
-def check(var num)
+def printFib(var num)
 start
     var i = 0.
     while (i < num) start
-        print(recur(i)).
+        print(fib(i)).
         i = i + 1.
     stop
 stop
 
-check(15).
+printFib(15).

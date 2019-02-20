@@ -1,6 +1,6 @@
-# File to demonstrate syntax error of forgetting a stop clause
-# make error2 : Displays the file
-# make error2x: Executes the file
+# Program to demonstrate syntax error of forgetting a stop clause (line 15)
+# make error2 : Displays the program
+# make error2x: Executes the program
 
 def error2(var num)
 start
@@ -12,4 +12,4 @@ start
     start
         num = num + 1.
     stop
-
+# invalid

@@ -1,19 +1,15 @@
-# File to demonstrate firt class functions
-# make functions: displays file
-# make functionsx: runs file
-def main()
-start
-    def f(var x) 
-    start 
-        lambda (y) start x + y stop.
-    stop
+# Program to demonstrate functions as first class objects
+# make functions : displays program
+# make functionsx: runs program
 
-    var a = f(3).
-    var b = f(11).
-
-    print("a(5) is " + a(5)). # should be 8
-    print("b(6) is " + b(6)). # should be 17
-    print("a(10) is " + a(10)). # should be 13
+def f(var x) 
+start 
+    def g(var y) start x + y. stop
 stop
 
-var run = main().
+var a = f(3). # functions are first class objects
+var b = f(11).
+
+print("a(5) is " + a(5)). # should be 8
+print("b(6) is " + b(6)). # should be 17
+print("a(10) is " + a(10)). # should be 13

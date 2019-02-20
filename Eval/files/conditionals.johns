@@ -1,14 +1,33 @@
-# test1 file run with ./scanner test1 or make test1
+# Program to demonstrate conditionals such as if, else if, else and while
+# make conditionals : Displays the program
+# make conditionalsx: Executes the program
 
-def equals(var a, var b) 
-start 
-    # This program checks if parameters a and b are equal to each other or not
-
-    if (a == b) start
-        return True.
+def ifDemo(var a, var b) 
+start
+    var num = 0.
+    if (a < b) start
+        num = b - a.
     stop
     
+    else if (a == b) start
+        num = 0.
+    stop
+
     else start
-        return False.
+        num = a - b.
     stop
 stop
+
+print("ifDemo(5,2) = " + ifDemo(5,2)). # Should be 3
+print("ifDemo(0,94) = " + ifDemo(0,94)). # Should be 94
+print("ifDemo(10,10) = " + ifDemo(10,10)). # Should be 0
+
+def whileDemo(var a)
+start
+    while(a > 0) start
+        print(a + " > 0").
+        a = a - 1.
+    stop
+stop
+
+whileDemo(10).

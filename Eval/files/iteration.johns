@@ -1,14 +1,30 @@
-# test1 file run with ./scanner test1 or make test1
+# Program to demonstrate iteration, only through while loops
+# make iteration : Displays the program
+# make iterationx: Executes the program
 
-def equals(var a, var b) 
-start 
-    # This program checks if parameters a and b are equal to each other or not
+def FizzBuzz() 
+start
+    var i = 1.
+    while (i < 100) start
+        if (((i % 3) == 0) and ((i % 5) == 0)) start
+            print("FizzBuzz").
+        stop
+        
+        else if ((i % 3) == 0) start
+            print("Fizz").
+        stop
 
-    if (a == b) start
-        return True.
-    stop
-    
-    else start
-        return False.
+        else if ((i % 5) == 0) start
+            print("Buzz").
+        stop
+
+        else start
+            print(i).
+        stop
+        
+        i = i + 1.
+
     stop
 stop
+
+FizzBuzz().

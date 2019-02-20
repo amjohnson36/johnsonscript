@@ -26,11 +26,22 @@ extern char* AT;
 extern char* INTEGER;
 extern char* STRING;
 extern char* BOOLEAN;
+extern char* FILEPOINTER;
 extern char* VAR;
 extern char* IF;
 extern char* ELSE;
 extern char* WHILE;
 extern char* PRINT;
+extern char* ARRAY;
+extern char* NEWARRAY;
+extern char* GETARRAY;
+extern char* SETARRAY;
+extern char* GETARGCOUNT;
+extern char* GETARG;
+extern char* OPENFILE;
+extern char* READINTEGER;
+extern char* ATFILEEND;
+extern char* CLOSEFILE;
 extern char* DEF;
 extern char* START;
 extern char* STOP;
@@ -62,6 +73,5 @@ extern char* WHILELOOP;
 
 extern char* CLOSURE;
 extern char* JOIN;
-extern char* THIS;
 
 #endif

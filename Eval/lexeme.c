@@ -14,8 +14,10 @@
 typedef struct lexeme
 {
     char* type;
-    int ival;
-    char* sval;
+    int ival; // For ints, errors
+    char* sval; // For strings, booleans, errors
+    Lexeme** aval; // For arrays
+    FILE* fval; // For file pointers
 
     Lexeme* l;
     Lexeme* r;
@@ -29,12 +31,14 @@ Lexeme* newLexemeWord(char* type, char* word)
 
     if (strcmp(type,INTEGER) == 0) l->ival = atoi(word);
     else {
-        l->sval = malloc(sizeof(word));
+        l->sval = malloc(strlen(word)+1);
         strcpy(l->sval, word);
     }
 
     l->l = NULL;
     l->r = NULL;
+    l->aval = NULL;
+    l->fval = NULL;
 
     return l;
 }
@@ -47,6 +51,8 @@ Lexeme* newLexemeChar(char* type)
 
     l->l = NULL;
     l->r = NULL;
+    l->aval = NULL;
+    l->fval = NULL;
 
     return l;
 }
@@ -54,14 +60,54 @@ Lexeme* newLexemeChar(char* type)
 Lexeme* newLexemeError(char* type, char* word, int line)
 {
     Lexeme* l = malloc(sizeof(Lexeme));
-    l->type = malloc(sizeof(type));
+    l->type = malloc(strlen(type)+1);
     strcpy(l->type, type);
 
-    l->sval = malloc(sizeof(word));
+    l->sval = malloc(strlen(word)+1);
     strcpy(l->sval, word);
 
     l->ival = line;
 
+    l->l = NULL;
+    l->r = NULL;
+    l->aval = NULL;
+    l->fval = NULL;
+
+    return l;
+}
+
+Lexeme* newLexemeArray(char* type, int size)
+{
+    Lexeme* l = malloc(sizeof(Lexeme));
+    l->type = malloc(strlen(type)+1);
+    strcpy(l->type, type);
+
+    l->aval = malloc(sizeof(Lexeme*) * size);
+
+    l->ival = size;
+    l->sval = NULL;
+    l->fval = NULL;
+    l->l = NULL;
+    l->r = NULL;
+
+    return l;
+}
+
+Lexeme* newLexemeFP(char* type, Lexeme* file)
+{
+    Lexeme* l = malloc(sizeof(Lexeme));
+    l->type = malloc(strlen(type)+1);
+    strcpy(l->type, type);
+
+    l->fval = fopen(getLexemeString(file), "r");
+
+    if (l->fval == NULL) {
+        printf("Couldn't open file\n");
+        return newLexemeError(ERROR, "Bad File Error", -1);
+    }
+
+    l->sval = NULL;
+    l->aval = NULL;
     l->l = NULL;
     l->r = NULL;
 
@@ -83,6 +129,21 @@ char* getLexemeString(Lexeme* l)
     return l->sval;
 }
 
+Lexeme* getLexemeArray(Lexeme* l, int loc)
+{
+    return l->aval[loc];
+}
+
+void setLexemeArray(Lexeme* array, Lexeme* loc, Lexeme* val)
+{
+    array->aval[getLexemeInt(loc)] = val;
+}
+
+FILE* getLexemeFP(Lexeme* l)
+{
+    return l->fval;
+}
+
 void displayLexeme(Lexeme* l)
 {
     printf("%s", l->type);
@@ -90,8 +151,10 @@ void displayLexeme(Lexeme* l)
     if (strcmp(getLexemeType(l), STRING) == 0) printf(": %s", getLexemeString(l));
     if (strcmp(getLexemeType(l), BOOLEAN) == 0) printf(": %s", getLexemeString(l));
     if (strcmp(getLexemeType(l), ID) == 0) printf(": %s", getLexemeString(l));
-    if (strcmp(getLexemeType(l), ERROR) == 0) printf(": %s on line %d",
-                                    getLexemeString(l), getLexemeInt(l));
+    if (strcmp(getLexemeType(l), ERROR) == 0) {
+        if (getLexemeInt(l) == -1) printf(": %s detected during runtime", getLexemeString(l)); // Error detected during runtime so no valid line number
+        else printf(": %s on line %d", getLexemeString(l), getLexemeInt(l));
+    }
 }
 
 Lexeme* cons(char* type, Lexeme* left, Lexeme* right)

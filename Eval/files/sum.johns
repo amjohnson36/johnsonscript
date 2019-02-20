@@ -1,0 +1,16 @@
+
+
+def sum(var fname)
+start
+    var s = 0.
+    var file = openfile(fname).
+    var i = readinteger(file).
+    while (not (atfileend(file))) start
+        s = s + i.
+        i = readinteger(file).
+    stop
+    print("Sum is " + s).
+    closefile(file).
+stop
+
+sum("ints").

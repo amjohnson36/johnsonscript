@@ -77,8 +77,11 @@ Lexeme* varDef()
     Lexeme* e;
     match(VAR);
     i = match(ID);
-    if (check(DOT))
+    if (check(DOT)) {
+        match(DOT);
         e = NULL;
+    }
+
     else {
         match(ASSIGN);
         e = expression();

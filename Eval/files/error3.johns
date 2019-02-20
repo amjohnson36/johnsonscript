@@ -1,11 +1,11 @@
-# File to demonstrate syntax error of not surrounding print with parenthesis 
-# make error3 : Displays the file
-# make error3x: Executes the file
+# Program to demonstrate syntax error of not surrounding print with parenthesis (line 7)
+# make error3 : Displays the program
+# make error3x: Executes the program
 
-def error(var num)
+def error3(var num)
 start
-    print "This is my function". # improper
+    print "This is my function". # invalid
     var num = num * 5.
-    print("num is " + num). # proper
+    print("num is " + num). # valid
 stop
 

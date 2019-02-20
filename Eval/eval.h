@@ -4,6 +4,9 @@
 #include "lexeme.h"
 #include "types.h"
 
+int countCL;
+char** argsCL;
+
 Lexeme* eval(Lexeme* tree, Lexeme* env);
 
 // Function defs
@@ -21,6 +24,17 @@ Lexeme* getClosureBody(Lexeme* closure);
 Lexeme* getClosureEnvironment(Lexeme* closure);
 Lexeme* evalArgs(Lexeme* args, Lexeme* env);
 Lexeme* evalPrint(Lexeme*, Lexeme*);
+Lexeme* evalNewArray(Lexeme*, Lexeme*);
+Lexeme* evalGetArray(Lexeme*, Lexeme*);
+Lexeme* evalSetArray(Lexeme*, Lexeme*);
+int argsLength(Lexeme*);
+void checkArgsLength(Lexeme*,int);
+Lexeme* evalGetArgCount();
+Lexeme* evalGetArg(Lexeme*,Lexeme*);
+Lexeme* evalOpenFile(Lexeme*,Lexeme*);
+Lexeme* evalReadInteger(Lexeme*,Lexeme*);
+Lexeme* evalAtFileEnd(Lexeme*,Lexeme*);
+Lexeme* evalCloseFile(Lexeme*,Lexeme*);
 
 Lexeme* evalBlock(Lexeme* tree, Lexeme* env);
 

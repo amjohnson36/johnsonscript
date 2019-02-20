@@ -203,6 +203,79 @@ Lexeme* unary()
         return cons(NOT, NULL, tree);
     }
 
+    // Built in array functions
+    else if (check(NEWARRAY)) {
+        match(NEWARRAY);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(NEWARRAY, NULL, tree);
+    }
+
+    else if (check(GETARRAY)) {
+        match(GETARRAY);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(GETARRAY, NULL, tree);
+    }
+
+    else if (check(SETARRAY)) {
+        match(SETARRAY);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(SETARRAY, NULL, tree);
+    }
+
+    // built in arg functions
+    else if (check(GETARGCOUNT)) {
+        match(GETARGCOUNT);
+        match(OPAREN);
+        match(CPAREN);
+        return cons(GETARGCOUNT, NULL, NULL);
+    }
+
+    else if (check(GETARG)) {
+        match(GETARG);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(GETARG, NULL, tree);
+    }
+
+    else if (check(OPENFILE)) {
+        match(OPENFILE);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(OPENFILE, NULL, tree);
+    }
+
+    else if (check(READINTEGER)) {
+        match(READINTEGER);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(READINTEGER, NULL, tree);
+    }
+
+    else if (check(ATFILEEND)) {
+        match(ATFILEEND);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(ATFILEEND, NULL, tree);
+    }
+
+    else if (check(CLOSEFILE)) {
+        match(CLOSEFILE);
+        match(OPAREN);
+        tree = expressionList();
+        match(CPAREN);
+        return cons(CLOSEFILE, NULL, tree);
+    }
+
     else
         return NULL;
 }
@@ -410,7 +483,9 @@ int operatorPending()
 int unaryPending()
 {
     return idDefPending() || check(INTEGER) || check(BOOLEAN) || check(STRING)
-            || check(OPAREN) || check(PRINT);
+            || check(OPAREN) || check(PRINT) || check(NEWARRAY) || check(SETARRAY)
+            || check(GETARRAY) || check(GETARGCOUNT) || check(GETARG) || check(OPENFILE)
+            || check(READINTEGER) || check(ATFILEEND) || check(CLOSEFILE);
 }
 
 int idDefPending()
