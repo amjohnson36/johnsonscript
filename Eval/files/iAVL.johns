@@ -2,6 +2,7 @@ def main()
 start
     var fp = openfile(getarg(2)).
     interpreter(fp).
+    closefile(fp).
     var return = 0.
 stop
 
