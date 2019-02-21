@@ -1,5 +1,5 @@
-<h1>johnsonscript</h1>
-johnsonscript is a dynamically-typed language built on C. It includes features such as:<br/>
+# johnsonscript
+johnsonscript is a dynamically-typed language built on C. It includes features such as:
 - multiple types
 - comments
 - objects
