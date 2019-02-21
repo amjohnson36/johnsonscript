@@ -1,25 +1,49 @@
-<h2>Introduction</h2>
-This is the rough draft of the README.md file for the johnsonScript programming language.
-This is a dynamically-typed language built upon C.
+<h1>johnsonscript</h1>
+johnsonscript is a dynamically-typed language built on C. It includes features such as:<br/>
+- multiple types
+- comments
+- objects
+- arrays with O(1) access time
+- conditionals
+- recursion
+- iteration
+- command line arguments
+- printing to console
+- reading integers from file
+- numerous operators
+- anonymous functions
+- functions as first class objects
 
-<h2>Types</h2>
-There are currently three types in the language.<br/>
--Integers are declared by: var myInt = 10.<br/>
--Strings are declared by: var myString = "hello world".<br/>
--Booleans are declared by: var myBoolean = True.<br/>
+<h3>Types</h3>
+There are currently four types in the language.<br/>
+- integers can be declared by: var myInt = 10.<br/>
+- strings can be declared by: var myString = "hello world".<br/>
+- booleans can be declared by: var myBoolean = True.<br/>
+- files can be declared by: var myFile = openfile("filename").<br/>
+- arrays can be declared by: var myArray = newarray(size).<br/>
 
-Failing to properly set variables equal to a valid type will lead to an error.
+Failing to properly declare variable will lead to an error or potentially a segmentation fault.
 
-<h2>Comments</h2>
-Comments are denoted by any line beginning with the '#' character. To do multiline comments, just type a '#' at the start of each line.
+<h3>Comments</h3>
+Comments are denoted by any line beginning with the '#' character.
 Comments are treated as whitespace during lexical analysis.
 
-<h2>Declarations</h2>
-There are two things to be declared in the johnsonScript language: variables and functions.<br/>
--Variables are declared by var ID = value. or just var ID.<br/>
--Functions are declared by def ID(optional arguments). It is then usually followed by a block that begins with start and ends with stop.<br/>
+<h3>Objects</h3>
+Objects are declared as if they were a function with only "this." as its body. An example:<br/>
+def myTuple(var x, var y) start this. stop<br/>
+It can then be constructed by var a = myTuple(2, 4).<br/>
 
-<h2>Operators</h2>
+Object attributes are accessed by the '@' symbol. An example:<br/>
+var b = a@x.
+(b == 2). # True
+
+<h3>Arrays</h3>
+Arrays are 0 indexed and treated as any other object. There are three main array functions: <br/>
+- newarray(var size) : creates a new array with size elements.<br/>
+- getarray(var array, var index) : gets the element from array at index.<br/>
+- setarray(var array, var index, var value) : sets the array at index to value.<br/>
+
+<h3>Conditionals</h3>
 The following operators are supported:<br/>
 -PLUS +<br/>
 -MINUS -<br/>
