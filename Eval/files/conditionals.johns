@@ -18,14 +18,14 @@ start
     stop
 stop
 
-print("ifDemo(5,2) = " + ifDemo(5,2)). # Should be 3
-print("ifDemo(0,94) = " + ifDemo(0,94)). # Should be 94
-print("ifDemo(10,10) = " + ifDemo(10,10)). # Should be 0
+print("ifDemo(5,2) = " + ifDemo(5,2) + \n). # Should be 3
+print("ifDemo(0,94) = " + ifDemo(0,94) + \n). # Should be 94
+print("ifDemo(10,10) = " + ifDemo(10,10) + \n). # Should be 0
 
 def whileDemo(var a)
 start
     while(a > 0) start
-        print(a + " > 0").
+        print(a + " > 0" + \n).
         a = a - 1.
     stop
 stop

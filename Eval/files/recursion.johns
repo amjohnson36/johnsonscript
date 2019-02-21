@@ -23,7 +23,7 @@ def printFib(var num)
 start
     var i = 0.
     while (i < num) start
-        print(fib(i)).
+        print(fib(i) + \n).
         i = i + 1.
     stop
 stop

@@ -48,6 +48,7 @@ extern char* STOP;
 extern char* AND;
 extern char* OR;
 extern char* NOT;
+extern char* NEGATIVE;
 extern char* ID;
 extern char* VAL;
 extern char* ERROR;

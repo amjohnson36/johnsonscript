@@ -48,6 +48,7 @@ char* STOP = "stop";
 char* AND = "and";
 char* OR = "or";
 char* NOT = "not";
+char* NEGATIVE = "negative";
 char* ID = "id";
 char* VAL = "val";
 char* ERROR = "ERROR";

@@ -89,6 +89,10 @@ Lexeme* eval(Lexeme* tree, Lexeme* env)
         return evalNot(tree, env);
     }
 
+    else if (strcmp(type, NEGATIVE) == 0) {
+        return evalNegative(tree, env);
+    }
+
     // Object access is @
     else if (strcmp(type, AT) == 0) {
         return evalAt(tree, env);
@@ -275,26 +279,26 @@ Lexeme* evalPrint(Lexeme* tree, Lexeme* env)
     char* rtype = getLexemeType(result);
 
     if (result == NULL) {
-        printf("NULL\n");
+        printf("NULL");
         return NULL;
     }
 
     else if (strcmp(INTEGER, rtype) == 0) {
-        printf("%d\n", getLexemeInt(result));
+        printf("%d", getLexemeInt(result));
         return result;
     }
 
     else if (strcmp(STRING, rtype) == 0) {
-        printf("%s\n", getLexemeString(result));
+        printf("%s", getLexemeString(result));
         return result;
     }
 
     else if (strcmp(BOOLEAN, rtype) == 0) {
-        printf("%s\n", getLexemeString(result));
+        printf("%s", getLexemeString(result));
         return result;
     }
     else {
-        printf("I didn't get that!\n");
+        printf("I didn't get that!");
         return result;
     }
 }
@@ -664,11 +668,8 @@ Lexeme* evalEquals(Lexeme* tree, Lexeme* env)
     char rval[6]; // Going to return a true or false lexeme
 
     if (strcmp(ltype, rtype) != 0) { // Two lexemes were of wrong type
-        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: ==", -1);
-        printf("\nIllegal\n");
-        displayLexeme(a);
-        printf("\n");
-        exit(-1);
+        strcpy(rval, "False");
+        return newLexemeWord(BOOLEAN, rval);
     }
 
     else if (strcmp(ltype, INTEGER) == 0) {
@@ -875,6 +876,22 @@ Lexeme* evalNot(Lexeme* tree, Lexeme* env)
         strcpy(rval, "True");
         return newLexemeWord(BOOLEAN, rval);
     }
+}
+
+Lexeme* evalNegative(Lexeme* tree, Lexeme* env)
+{
+    Lexeme* result = eval(cdr(tree), env);
+    if (strcmp(getLexemeType(result), INTEGER) != 0) {
+        Lexeme* a = newLexemeError(ERROR, "Bad Operation Error: NEG", -1);
+        printf("\nIllegal\n");
+        displayLexeme(a);
+        printf("\n");
+        exit(-1);
+    }
+    int a = getLexemeInt(result);
+    char buffer[64];
+    sprintf(buffer, "%d", a * -1);
+    return newLexemeWord(INTEGER, buffer);
 }
 
 Lexeme* evalAt(Lexeme* tree, Lexeme* env)

@@ -18,7 +18,7 @@ start
     while (not (i == 0)) start
         i = i - 1.
         var b = getarray(arr, i).
-        print(i + b).
+        print(i + b + \n).
     stop
 stop
 

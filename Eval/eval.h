@@ -52,6 +52,7 @@ Lexeme* evalAssign(Lexeme* tree, Lexeme* env);
 Lexeme* evalAnd(Lexeme* tree, Lexeme* env);
 Lexeme* evalOr(Lexeme* tree, Lexeme* env);
 Lexeme* evalNot(Lexeme* tree, Lexeme* env);
+Lexeme* evalNegative(Lexeme* tree, Lexeme* env);
 
 Lexeme* evalAt(Lexeme* tree, Lexeme* env);
 

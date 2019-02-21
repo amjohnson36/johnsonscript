@@ -5,68 +5,388 @@ start
     var return = 0.
 stop
 
-def tNode(var int, var left, var right, var bf) # tree node object
+def tNode(var int, var left, var right, var parent, 
+            var height, var lheight, var rheight, var balance) # tree node object
 start
     this.
 stop
 
 def interpreter(var fp)
 start
-    var tree = tNode(.
-    var command.
-    var x.
-    while (not (atfileend(fp))) start
-        command = readinteger(fp).
-        
+    var root = 0.
+    var flag = 1.
+    var command = 2.
+    
+    command = readinteger(fp).
+    while (not (atfileend(fp))) start        
         if (command == 0) start
-            print(tree).
-            displayTree(tree).
+            displayTree(root, False).
+            print(\n).
         stop
 
         else start # command = 1
             var i = readinteger(fp).
-            x = tNode(i, 0, 0, 0).
-            print("inserting x: " + x@int).
-            insertBST(tree, x).
-            #insertionFixup(x).
+            var x = tNode(i, 0, 0, 0, 0, 0, 0, 0). 
+            
+            if (flag == 1) start
+                root = insertBST(root, x).
+                setBalance(x).
+                root = insertionFixup(x).
+                flag = 0.
+            stop
+
+            else start
+                insertBST(root, x).
+                setBalance(x).
+                root = insertionFixup(x).
+            stop
+            command = 2.        
         stop
+        command = readinteger(fp).
     stop
 stop
 
-def displayTree(var tree)
+def displayTree(var node, var space)
 start
-    if (tree == 0) start
+    if (not (space)) start
+        space = True.
+    stop
+    else start
+        print(" ").
+    stop
+
+    if (node == 0) start
         return = 0.
     stop
 
     else start
-        displayTree(tree@left).
-        print(tree@int).
-        displayTree(tree@right).
-    stop
+        displayTree(node@left, True).
+        
+        if (node@parent == 0) start # node is the root
+            print("[" + node@int).
+            if (node@balance == 1) start
+                print("+").
+            stop
+            else if (node@balance == neg 1) start
+                print("-").
+            stop
+            print("]").
+        stop
 
+        else start # node is not the root
+            var p = node@parent.
+            print(node@int).
+            if (node@balance == 1) start
+                print("+").
+            stop
+            else if (node@balance == neg 1) start
+                print("-").
+            stop
+            print("(" + p@int).
+            if (p@balance == 1) start
+                print("+").
+            stop
+            else if (p@balance == neg 1) start
+                print("-").
+            stop
+            
+            print(")").
+        stop
+
+        displayTree(node@right, True).
+    stop
 stop
 
 
-def insertBST(var node, var x)
+def insertBST(var root, var node)
 start
-    if (node == 0) start
-        node = x.
+    if (root == 0) start
+        root = node.
     stop
 
-    if (x@int < node@int) start
-        node@left = insertBST(node@left, x).
+    else if (root@int < node@int) start
+        if (root@right == 0) start
+            root@right = node.
+            node@parent = root.
+        stop
+        else start
+            insertBST(root@right, node).
+        stop
     stop
-
-    else if (x@int > node@int) start
-        node@right = insertBST(node@right, x).
+        
+    else start
+        if (root@left == 0) start
+            root@left = node.
+            node@parent = root.
+        stop
+        else start
+            insertBST(root@left, node).
+        stop
     stop
-    
-    var n = node.
 stop
 
 def insertionFixup(var x)
 start
+    var running = True.
+    var return.
+    while (running) start
+        if (x@parent == 0) start # x is the root
+            running = False.
+        stop
+
+        else if (((x@int < x@parent@int) and (x@parent@balance == neg 1)) or # parent favors the sibling
+                ((x@int > x@parent@int) and (x@parent@balance == 1))) start
+            setBalance(x@parent).
+            running = False.
+        stop
+
+        else if (x@parent@balance == 0) start # parent has no favorite
+            setBalance(x@parent).
+            x = x@parent.
+        stop
+
+        else start # parent favors x
+            var y = 0.
+            var p = x@parent.
+
+            if (x@balance > 0) start
+                y = x@left.
+            stop
+            else if (x@balance < 0) start
+                y = x@right.
+            stop
+
+            if ((not (y == 0)) and (not (linear(x)))) start # case 3
+                # rotate y to x
+                # rotate y to p
+                if (x@int < y@int) start
+                    leftRightRotation(y).
+                stop
+
+                else start
+                    rightLeftRotation(y).
+                stop
+                
+                setBalance(x).
+                setBalance(p).
+                setBalance(y).
+            stop
+
+            else start # case 4
+                # rotate x to p
+                if (x@int > p@int) start
+                    leftRotation(x).
+                stop
+
+                else start
+                    rightRotation(x).
+                stop
+
+                setBalance(p).
+                setBalance(x).
+            stop
+            running = False.
+        stop
+    stop
+    while (not (x@parent == 0)) start
+        x = x@parent.
+    stop
+    return = x.
+stop
+
+def setBalance(var x)
+start
+    if (x@left == 0) start
+        x@lheight = 0.
+    stop
+    else start
+        x@lheight = x@left@height.
+    stop
+
+    if (x@right == 0) start
+        x@rheight = 0.
+    stop
+    else start
+        x@rheight = x@right@height.
+    stop
+
+    if (x@rheight > x@lheight) start
+        x@height = x@rheight + 1.
+    stop
+    else start
+        x@height = x@lheight + 1.
+    stop
+
+    x@balance = x@lheight - x@rheight.
+stop
+
+def leftRotation(var x)
+start
+    var p = x@parent.
+    var gp = p@parent.
+    var l = x@left.
+    p@right = l.
+
+    if (not (l == 0)) start
+        l@parent = p.
+        print(l@int).
+    stop
+    
+    x@left = p.
+    x@parent = gp.
+    p@parent = x.
+    
+    if (not (gp == 0)) start
+        if (x@int < gp@int) start
+            gp@left = x.
+        stop
+        else start
+            gp@right = x.
+        stop
+    stop
+stop
+
+def rightRotation(var x)
+start
+    var p = x@parent.
+    var gp = p@parent.
+    var r = x@right.
+
+    p@left = r.
+
+    if (not (r == 0)) start
+        r@parent = p.
+    stop
+
+    x@right = p.
+    x@parent = gp.
+    p@parent = x.
+
+    if (not (gp == 0)) start
+        if (x@int < gp@int) start
+            gp@left = x.
+        stop
+        else start
+            gp@right = x.
+        stop
+    stop
+stop
+
+def leftRightRotation(var x)
+start
+    var p = x@parent.
+    var gp = p@parent.
+    var l = x@left.
+
+    p@right = l.
+    if (not (l == 0)) start
+        l@parent = p.
+    stop
+
+    x@left = p.
+    p@parent = x.
+    x@parent = gp.
+    
+    if (not (gp == 0)) start
+        if (x@int < gp@int) start
+            gp@left = x.
+        stop
+        else start
+            gp@right = x.
+        stop
+    stop
+
+    rightRotation(x).
+stop
+
+def rightLeftRotation(var x)
+start
+    var p = x@parent.
+    var gp = p@parent.
+    var r = x@right.
+    
+    p@left = r.
+    
+    if (not (r == 0)) start
+        r@parent = p.
+    stop
+
+    x@right = p.
+    p@parent = x.
+    x@parent = gp.
+
+    if (not (gp == 0)) start
+        if (x@int < gp@int) start
+            gp@left = x.
+        stop
+        else start
+            gp@right = x.
+        stop
+    stop
+    
+    leftRotation(x).
+stop
+
+def linear(var x)
+start
+    var y = 0.
+    var p = x@parent.
+    var return.
+
+    if (x@balance == 1) start
+        y = x@left.
+    stop
+    
+    else if (x@balance == neg 1) start
+        y = x@right.
+    stop
+    
+    if (y == 0) start
+        return = False.
+    stop
+
+    else start
+        if ((y@int < x@int) and (x@int < p@int)) start
+            return = True. # Linear
+        stop
+        
+        else if ((y@int > x@int) and (x@int > p@int)) start
+            return = True. # Also Linear
+        stop
+
+        else start
+            return = False.
+        stop
+    stop
+stop
+
+def printNode(var x) # debugging function
+start
+    var p = x@parent.
+    var l = x@left.
+    var r = x@right.
+
+    print(x@int + " ").
+    if (p == 0) start
+        print(0 + " ").
+    stop
+    else start
+        print(p@int + " ").
+    stop
+
+    if (l == 0) start
+        print(0 + " ").
+    stop
+    else start
+        print(l@int + " ").
+    stop
+
+    if (r == 0) start
+        print(0 + " ").
+    stop
+    else start
+        print(r@int + " ").
+    stop
 stop
 
 main().

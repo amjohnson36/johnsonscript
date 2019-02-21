@@ -52,6 +52,13 @@ Lexeme* lex(FILE* fp)
                     return newLexemeChar(ASSIGN);
                 }
             }
+            if (ch == '\\') { // Check whether it is '=' or '=='
+                int ch2 = getc(fp);
+                if (ch2 == 'n') return newLexemeWord(STRING, "\n");
+                else {
+                    ungetc(ch2, fp);
+                }
+            }
             if (isdigit(ch)) { // Get Integer
                 ungetc(ch, fp);
                 return lexNumber(fp);
@@ -172,6 +179,9 @@ Lexeme* lexVariableOrKeyword(FILE* fp)
     else if ((strcmp(buffer, "True") == 0) || strcmp(buffer, "False") == 0) {
         return newLexemeWord(BOOLEAN, buffer);
     }
+    else if (strcmp(buffer, "neg") == 0) {
+        return newLexemeWord(NEGATIVE, buffer);
+    }
     else { //string is a variable
         return newLexemeWord(ID, buffer);
     }
@@ -186,7 +196,7 @@ Lexeme* lexString(FILE* fp)
     int index = 0;
 
     ch = getc(fp);
-    while ((ch != EOF) && (ch != '\"')) {
+    while ((ch != EOF) && (ch != '"')) {
         if (index == length) {
             buffer = realloc(buffer, sizeof(char) * length * 2 + 1);
             length *= 2;

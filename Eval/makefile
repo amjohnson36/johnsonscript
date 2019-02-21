@@ -123,12 +123,12 @@ objectsx      : johnsonscript
 				@johnsonscript files/objects.johns
 
 problem       : johnsonscript
-				@echo Displaying problem.johns:
-				@cat files/problem.johns
+				@echo Displaying iAVL.johns:
+				@cat files/iAVL.johns
 
 problemx      : johnsonscript
-				@echo Executing problem.johns:
-				@johnsonscript files/problem.johns
+				@echo Executing iAVL.johns:
+				@johnsonscript files/iAVL.johns files/commands
 
 clean         :
 				rm -f $(OBJS) johnsonscript

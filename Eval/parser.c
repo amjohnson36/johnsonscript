@@ -203,6 +203,12 @@ Lexeme* unary()
         return cons(NOT, NULL, tree);
     }
 
+    else if (check(NEGATIVE)) {
+        match(NEGATIVE);
+        tree = unary();
+        return cons(NEGATIVE, NULL, tree);
+    }
+
     // Built in array functions
     else if (check(NEWARRAY)) {
         match(NEWARRAY);
@@ -303,7 +309,7 @@ Lexeme* idDef()
 
     else if (check(AT)) {
         match(AT);
-        a = match(ID);
+        a = idDef();
         return cons(AT, i, a);
     }
 
@@ -485,7 +491,7 @@ int unaryPending()
     return idDefPending() || check(INTEGER) || check(BOOLEAN) || check(STRING)
             || check(OPAREN) || check(PRINT) || check(NEWARRAY) || check(SETARRAY)
             || check(GETARRAY) || check(GETARGCOUNT) || check(GETARG) || check(OPENFILE)
-            || check(READINTEGER) || check(ATFILEEND) || check(CLOSEFILE);
+            || check(READINTEGER) || check(ATFILEEND) || check(CLOSEFILE) || check(NEGATIVE);
 }
 
 int idDefPending()
