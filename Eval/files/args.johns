@@ -1,4 +1,0 @@
-
-
-print(getargcount()).
-print(getarg(1)).

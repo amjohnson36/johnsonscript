@@ -1,0 +1,15 @@
+# Program to demonstrate functions as first class objects
+# make functions : Displays the program
+# make functionsx: Executes the program
+
+def f(var x) 
+start 
+    def g(var y) start x + y. stop
+stop
+
+var a = f(3). # functions are first class objects
+var b = f(11).
+
+print("a(5) is " + a(5) + \n). # should be 8
+print("b(6) is " + b(6) + \n). # should be 17
+print("a(10) is " + a(10) + \n). # should be 13

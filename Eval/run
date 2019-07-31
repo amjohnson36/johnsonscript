@@ -1,2 +1,0 @@
-#!/bin/bash
-./johnsonscript files/$1.johns files/$2
