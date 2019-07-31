@@ -28,107 +28,107 @@ eval.o        : eval.c eval.h
 
 error1        : johnsonscript
 				@echo Displaying error1.johns:
-				@cat files/error1.johns
+				@cat ../Johns../JohnsFiles/error1.johns
 
 error1x       : johnsonscript
 				@echo Executing error1.johns:
-				-./johnsonscript files/error1.johns
+				-./johnsonscript ../JohnsFiles/error1.johns
 
 error2        : johnsonscript
 				@echo Displaying error2.johns:
-				@cat files/error2.johns
+				@cat ../JohnsFiles/error2.johns
 
 error2x       : johnsonscript
 				@echo Executing error2.johns:
-				-./johnsonscript files/error2.johns
+				-./johnsonscript ../JohnsFiles/error2.johns
 
 error3        : johnsonscript
 				@echo Displaying error3.johns:
-				@cat files/error3.johns
+				@cat ../JohnsFiles/error3.johns
 
 error3x       : johnsonscript
 				@echo Executing error3.johns:
-				-./johnsonscript files/error3.johns
+				-./johnsonscript ../JohnsFiles/error3.johns
 
 error4        : johnsonscript
 				@echo Displaying error4.johns:
-				@cat files/error4.johns
+				@cat ../JohnsFiles/error4.johns
 
 error4x       : johnsonscript
 				@echo Executing error4.johns:
-				-./johnsonscript files/error4.johns
+				-./johnsonscript ../JohnsFiles/error4.johns
 
 error5        : johnsonscript
 				@echo Displaying error5.johns:
-				@cat files/error5.johns
+				@cat ../JohnsFiles/error5.johns
 
 error5x       : johnsonscript
 				@echo Executing error5.johns:
-				-./johnsonscript files/error5.johns
+				-./johnsonscript ../JohnsFiles/error5.johns
 
 arrays        : johnsonscript
 				@echo Displaying arrays.johns:
-				@cat files/arrays.johns
+				@cat ../JohnsFiles/arrays.johns
 
 arraysx       : johnsonscript
 				@echo Executing arrays.johns:
-				@johnsonscript files/arrays.johns
+				@johnsonscript ../JohnsFiles/arrays.johns
 
 conditionals  : johnsonscript
 				@echo Displaying conditionals.johns:
-				@cat files/conditionals.johns
+				@cat ../JohnsFiles/conditionals.johns
 
 conditionalsx : johnsonscript
 				@echo Executing conditionals.johns:
-				@johnsonscript files/conditionals.johns
+				@johnsonscript ../JohnsFiles/conditionals.johns
 
 recursion     : johnsonscript
 				@echo Displaying recursion.johns:
-				@cat files/recursion.johns
+				@cat ../JohnsFiles/recursion.johns
 
 recursionx    : johnsonscript
 				@echo Executing recursion.johns:
-				@johnsonscript files/recursion.johns
+				@johnsonscript ../JohnsFiles/recursion.johns
 
 iteration     : johnsonscript
 				@echo Displaying iteration.johns:
-				@cat files/iteration.johns
+				@cat ../JohnsFiles/iteration.johns
 
 iterationx    : johnsonscript
 				@echo Executing iteration.johns:
-				@johnsonscript files/iteration.johns
+				@johnsonscript ../JohnsFiles/iteration.johns
 
 functions     : johnsonscript
 				@echo Displaying functions.johns:
-				@cat files/functions.johns
+				@cat ../JohnsFiles/functions.johns
 
 functionsx    : johnsonscript
 				@echo Executing functions.johns:
-				@johnsonscript files/functions.johns
+				@johnsonscript ../JohnsFiles/functions.johns
 
 lambda        : johnsonscript
 				@echo Displaying lambda.johns:
-				@cat files/lambda.johns
+				@cat ../JohnsFiles/lambda.johns
 
 lambdax       : johnsonscript
 				@echo Executing lambda.johns:
-				@johnsonscript files/lambda.johns
+				@johnsonscript ../JohnsFiles/lambda.johns
 
 objects       : johnsonscript
 				@echo Displaying objects.johns:
-				@cat files/objects.johns
+				@cat ../JohnsFiles/objects.johns
 
 objectsx      : johnsonscript
 				@echo Executing objects.johns:
-				@johnsonscript files/objects.johns
+				@johnsonscript ../JohnsFiles/objects.johns
 
 problem       : johnsonscript
 				@echo Displaying iAVL.johns:
-				@cat files/iAVL.johns
+				@cat ../JohnsFiles/iAVL.johns
 
 problemx      : johnsonscript
 				@echo Executing iAVL.johns:
-				@johnsonscript iAVL.johns commands
+				@johnsonscript ../JohnsFiles/iAVL.johns ../JohnsFiles/commands
 
 clean         :
 				rm -f $(OBJS) johnsonscript
